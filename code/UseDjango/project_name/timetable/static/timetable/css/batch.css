@@ -1,0 +1,327 @@
+/**
+ * Batch Operations Styling
+ */
+
+.batch-controls {
+    display: flex; /* Always visible for debugging */
+    margin-bottom: 20px;
+    padding: 15px;
+    background: var(--bg-secondary, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-secondary, rgba(255, 255, 255, 0.1));
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.batch-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.batch-delete-btn,
+.batch-deselect-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.2));
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--bg-primary, rgba(255, 255, 255, 0.05));
+    color: var(--text-primary, rgb(220, 220, 220));
+}
+
+.batch-delete-btn {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(192, 57, 43, 0.1));
+    border-color: rgba(231, 76, 60, 0.5);
+}
+
+.batch-deselect-btn {
+    background: linear-gradient(135deg, rgba(149, 165, 166, 0.1), rgba(127, 140, 141, 0.1));
+    border-color: rgba(149, 165, 166, 0.5);
+}
+
+.batch-delete-btn:hover:not(:disabled),
+.batch-deselect-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.batch-delete-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(192, 57, 43, 0.2));
+    border-color: rgba(231, 76, 60, 0.8);
+}
+
+.batch-deselect-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(149, 165, 166, 0.2), rgba(127, 140, 141, 0.2));
+    border-color: rgba(149, 165, 166, 0.8);
+}
+
+.batch-delete-btn:active:not(:disabled),
+.batch-deselect-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.batch-delete-btn:disabled,
+.batch-deselect-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: var(--bg-secondary, rgba(255, 255, 255, 0.03));
+    border-color: var(--border-secondary, rgba(255, 255, 255, 0.1));
+}
+
+.batch-count {
+    font-size: 12px;
+    padding: 2px 6px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.batch-info {
+    margin-left: auto;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--text-secondary, rgba(220, 220, 220, 0.7));
+    background: var(--bg-primary, rgba(0, 0, 0, 0.2));
+    border: 1px solid var(--border-secondary, rgba(255, 255, 255, 0.1));
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Checkbox column */
+.checkbox-col {
+    width: 50px;
+    text-align: center;
+}
+
+.batch-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--accent-blue, rgb(52, 152, 219));
+}
+
+/* Select all checkbox in header */
+#selectAll {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--accent-blue, rgb(52, 152, 219));
+}
+
+/* Selected row highlighting */
+.batch-item {
+    transition: background-color 0.2s ease, opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.batch-item:hover {
+    background: var(--bg-secondary, rgba(255, 255, 255, 0.03));
+}
+
+.batch-item.selected {
+    background: linear-gradient(90deg, 
+        rgba(52, 152, 219, 0.1), 
+        rgba(52, 152, 219, 0.05)
+    );
+    border-left: 3px solid var(--accent-blue, rgb(52, 152, 219));
+}
+
+/* Animation for batch controls */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.batch-controls {
+    animation: slideDown 0.3s ease;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .batch-controls {
+        padding: 12px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .batch-actions {
+        justify-content: center;
+    }
+
+    .batch-info {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .batch-delete-btn,
+    .batch-deselect-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-label {
+        display: none;
+    }
+
+    .batch-delete-btn,
+    .batch-deselect-btn {
+        min-width: 44px;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .btn-icon {
+        font-size: 18px;
+    }
+
+    .batch-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: rgba(231, 76, 60, 0.9);
+        color: white;
+        min-width: 20px;
+        text-align: center;
+    }
+
+    .batch-delete-btn,
+    .batch-deselect-btn {
+        position: relative;
+    }
+}
+
+/* Light theme adjustments */
+.light-theme .batch-controls {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .batch-delete-btn,
+.light-theme .batch-deselect-btn {
+    color: rgb(30, 30, 30);
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+.light-theme .batch-delete-btn {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(192, 57, 43, 0.15));
+    border-color: rgba(231, 76, 60, 0.6);
+}
+
+.light-theme .batch-deselect-btn {
+    background: linear-gradient(135deg, rgba(149, 165, 166, 0.15), rgba(127, 140, 141, 0.15));
+    border-color: rgba(149, 165, 166, 0.6);
+}
+
+.light-theme .batch-delete-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.25), rgba(192, 57, 43, 0.25));
+}
+
+.light-theme .batch-deselect-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(149, 165, 166, 0.25), rgba(127, 140, 141, 0.25));
+}
+
+.light-theme .batch-delete-btn:disabled,
+.light-theme .batch-deselect-btn:disabled {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.light-theme .batch-info {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgba(30, 30, 30, 0.7);
+}
+
+.light-theme .batch-count {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.light-theme .batch-item.selected {
+    background: linear-gradient(90deg, 
+        rgba(52, 152, 219, 0.15), 
+        rgba(52, 152, 219, 0.08)
+    );
+}
+
+/* Print styles */
+@media print {
+    .batch-controls {
+        display: none;
+    }
+    
+    .checkbox-col {
+        display: none;
+    }
+    
+    .batch-checkbox {
+        display: none;
+    }
+}
+
+/* Table styling for batch items */
+table.batch-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.batch-table thead {
+    background: var(--bg-secondary, rgba(255, 255, 255, 0.05));
+    border-bottom: 2px solid var(--border-primary, rgba(255, 255, 255, 0.2));
+}
+
+table.batch-table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary, rgb(220, 220, 220));
+}
+
+table.batch-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-secondary, rgba(255, 255, 255, 0.1));
+}
+
+table.batch-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Loading state for batch operations */
+.batch-loading {
+    pointer-events: none;
+    opacity: 0.6;
+    position: relative;
+}
+
+.batch-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-primary, rgba(0, 0, 0, 0.3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}

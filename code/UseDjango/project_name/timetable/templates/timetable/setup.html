@@ -1,0 +1,294 @@
+
+{% extends 'timetable/template.html' %}
+{% comment %} extends must be the first line and load static to use the static folder where extra css is stored{% endcomment %}
+{% load static %}
+
+{% block title %}Setup{% endblock %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'timetable/css/setup.css'%}?v=9"> {% endblock %}
+
+{% block nav_setup %}activeNavPage{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:home' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="breadcrumb-icon">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                <span class="breadcrumb-text">Home</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-text">Setup</span>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="mainContainer">
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Department Setup</h1>
+            <p class="page-subtitle">Manage your departments, teachers, classrooms and lab rooms</p>
+        </div>
+        {% if setup_objects %}
+        <a href="{% url 'timetable:setupFormUrlIdentifier' %}" class="btn-md btn-indigo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+            Add Department
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="displayingSetup">
+
+        {% if messages %}
+          {% for message in messages %}
+            <div id="popup" class="popup popup-{{ message.tags }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% if setup_objects %}
+
+            {% for setup_object in setup_objects %}
+              <div class="departmentCard">
+              
+                  <!-- Main department header -->
+                  <div class="departmentHeader">
+                    <div class="departmentTitle">
+                      <span class="value">Department Name: {{setup_object.department_name}}</span>
+                    </div>
+                    <div class="managebtn">
+                      <a href="{% url 'timetable:years' setup_object.pk %}" class="btn-md btn-blue">Manage years</a>
+                    </div>
+                    <div class="managebtn">
+                      <a href="{% url 'timetable:setup_edit' setup_object.pk %}" class="btn-md btn-blue">Edit Department</a>
+                    </div>
+                    <div class="generate">
+                       <a href="{% url 'timetable:department_saved_timetable_list' setup_object.pk %}" class="btn-md btn-green">Manage Timetables</a>
+                    </div>
+                    <form method="post" action = "{% url 'timetable:setup_delete' setup_object.pk %}" class="delete-form" data-item-name="{{ setup_object.department_name }}" data-item-type="department">
+                      {% csrf_token %}
+                      <button type="button" class="btn-md btn-red deleteBtn">Delete</button>
+                    </form>
+                  </div>
+
+                  <div class="departmentImpInfoGrid">
+                    <div class="box">
+                      <span>{{ setup_object.relatedNameYearSetupModel.count}}</span>
+                      <span>Total Years</span>
+                    </div>
+
+                    <div class="box">
+                      <span>{{ setup_object.relatedNameTeachers.count }}</span>
+                      <span>Total Teachers</span>
+                    </div>
+                    <div class="box">
+                      <span>{{ setup_object.relatedNameClassRooms.count }}</span>
+                      <span>Total Classrooms</span>
+                    </div>
+                    <div class="box">
+                      <span>{{ setup_object.relatedNameLabRooms.count }}</span>
+                      <span>Total Labs</span>
+                    </div>
+
+
+                  </div>
+
+                  <details class="dept-details">
+                    <summary class="dept-details-toggle">
+                      <span>View Details</span>
+                      <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                    </summary>
+                    <div class="dept-details-body">
+
+                    <div class="sub1grid">
+                        <!-- row 1 -->
+                        <div class="label">Start-time:</div>
+                        <div class="value">{{setup_object.start_time}}</div>
+
+                        <div class="label">End-time</div>
+                        <div class="value">{{setup_object.end_time}}</div>
+
+                        <!-- row 2 -->
+                        <div class="label">Number of days in week:</div>
+                        <div class="value">{{setup_object.number_of_days}}</div>
+
+
+                        <!-- row 3 -->
+                        <div class="label">Number of hours in one lecture:</div>
+                        <div class="value">{{setup_object.hours_in_lecture}}</div>
+
+                        <div class="label">Number of hours in one practical</div>
+                        <div class="value">{{setup_object.hours_in_practical}}</div>
+
+                        <div class="label">All possible lecture time slots in a day:</div>
+                        <div class="value">
+                          {{setup_object.all_lecture_timeslots}}
+                        </div>
+                        <div class="label">All possible practical time slots in a day:</div>
+                        <div class="value">
+                          {{setup_object.all_practical_timeslots}}
+                        </div>
+                    </div>
+                    <div class="sub6">
+                        <div class="tableRecess">
+                            <div class="label2">Recesses:</div>
+                            <div class="tableRecessesWrapper">
+                              <table id="tableRecesses">
+                                <tr>
+                                  <th>No.</th>
+                                  <th>Start Time</th>
+                                  <th>End Time</th>
+                                  <!-- i dont know if i want to put the delete button here also -->
+                                  <!-- <th>Action</th> -->
+                                </tr>
+                                <!-- loop over recesses -->
+                                {% for recess in setup_object.relatedNameRecesses.all %}
+                                    <tr>
+                                      <td>{{ forloop.counter }}</td>
+                                      <td>{{ recess.recess_start_time}}</td>
+                                      <td>{{ recess.recess_end_time}}</td>
+                                    </tr>
+                                  {% endfor %}
+                              </table>
+                            </div>
+                            <!-- i also dont know if i want to take add teachers here, as the main purpose is to display -->
+                        </div>
+                    </div>
+                    <div class="sub5">
+                        <h4 class="label2">Years</h4>
+
+                        {% if setup_object.relatedNameYearSetupModel.all %}
+                        <div class="tableYearsWrapper">
+                          <table id="tableYears">
+                            <tr>
+                              <th>No.</th>
+                              <th>Year Name</th>     
+                              <th>Total Students</th>  
+                            </tr>
+                            {% for year in setup_object.relatedNameYearSetupModel.all %}
+                              <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ year.year_name}}</td>
+                                <td>{{ year.total_students}}</td>
+                              </tr>
+                            {% endfor %}
+                          </table>
+                        </div>
+                        {% else %}
+                          <p>No years added.</p>
+                        {% endif %}
+                    </div>
+                    <div class="sub2">
+
+                        <div class="label2">Added teachers:</div>
+                        <div class="tableTeachersWrapper">
+                          <table id="tableTeachers">
+                            <tr>
+                              <th>No.</th>
+                              <th>Teacher Name</th>
+                              <!-- i dont know if i want to put the delete button here also -->
+                              <!-- <th>Action</th> -->
+                            </tr>
+                            <!-- loop over teachers -->
+                            {% for teacher in setup_object.relatedNameTeachers.all %}
+                                <tr>
+                                  <td>{{ forloop.counter }}</td>
+                                  <td>{{ teacher.teacher_name}}</td>
+                                </tr>
+                              {% endfor %}
+                          </table>
+                        </div>
+                        <!-- i also dont know if i want to take add teachers here, as the main purpose is to display -->
+                    </div>
+
+                    <!-- class rooms -->
+                    <div class="sub3">
+
+                        <div class="label2">Added Class Rooms:</div>
+                        <div class="tableClassRoomsWrapper">
+                          <table id="tableClassRooms">
+                            <tr>
+                              <th>No.</th>
+                              <th>Classroom number</th>
+                              <th>Capacity</th>
+                              <!-- i dont know if i want to put the delete button here also -->
+                              <!-- <th>Action</th> -->
+                            </tr>
+                            <!-- loop over classroom numbers -->
+                            {% for room in setup_object.relatedNameClassRooms.all %}
+                                <tr>
+                                  <td>{{ forloop.counter }}</td>
+                                  <td>{{ room.classroom_id}}</td>
+                                  <td>{{ room.classroom_capacity}}</td>
+                                </tr>
+                              {% endfor %}
+
+                          </table>
+                        </div>
+                        <!-- i also dont know if i want to take add teachers here, as the main purpose is to display -->
+                    </div>
+
+                    <!-- labs -->
+                    <div class="sub4">
+                        <div class="label2">Added Labs:</div>
+                        <div class="tableLabRoomsWrapper">
+                        <table id="tableLabRooms">
+                          <tr>
+                            <th>No.</th>
+                            <th>Lab number</th>
+                            <th>Capacity</th>
+                            <!-- i dont know if i want to put the delete button here also -->
+                            <!-- <th>Action</th> -->
+                          </tr>
+                          <!-- loop over labs -->
+                            {% for lab in setup_object.relatedNameLabRooms.all %}
+                              <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ lab.labroom_id}}</td>
+                                <td>{{ lab.labroom_capacity}}</td>
+                              </tr>
+                            {% endfor %}
+                        </table>
+                        </div>
+                        <!-- i also dont know if i want to take add teachers here, as the main purpose is to display -->
+                      </div>
+
+                    </div><!-- /.dept-details-body -->
+                  </details>
+                
+                </div>
+
+            {% endfor %}
+
+
+
+
+        {% comment %} if the object is empty that means no data is added{% endcomment %}
+        {% else %}
+
+        <div class="empty-state">
+            <div class="empty-icon">🏛️</div>
+            <h2 class="empty-title">No departments yet</h2>
+            <p class="empty-desc">Create your first department to start building timetables. You'll add teachers, classrooms, labs, and generate schedules from here.</p>
+            <a href="{% url 'timetable:setupFormUrlIdentifier' %}" class="btn-md btn-indigo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+                Create first department
+            </a>
+        </div>
+
+        {% endif %}
+    </div>
+
+    <div>
+
+    </div>
+</div>
+{% endblock %}

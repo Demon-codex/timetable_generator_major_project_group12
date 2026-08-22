@@ -1,0 +1,503 @@
+
+{% extends 'timetable/template.html' %}
+{% load static %}
+
+
+{% block title %}generate{% endblock %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'timetable/css/generate.css' %}?v=6"> {% endblock %}
+
+{% block nav_generate %}activeNavPage{% endblock %}
+{% block content %}
+    <div class="mainContainer">
+
+
+
+    <!-- Debugging info -->
+     <!-- <div class="debuginfoContainer" style="color: white;"> -->
+
+
+        <!-- <pre>{{ fitness|pprint }}</pre> -->
+        <!-- <h1>Practical timetable</h1> -->
+        <!-- <h1>practical timetable</h1> -->
+        <!-- <pre>{{ practical_timetable|pprint }}</pre> -->
+        <!-- <h1>lecture timetable</h1> -->
+        <!-- <pre>{{ lecture_timetable|pprint }}</pre> -->
+        <!-- <h1>combined timetable</h1> -->
+        <!-- <pre>{{ combined_timetable|pprint }}</pre> -->
+        <!-- <pre>{{ display_tt|pprint }}</pre> -->
+        <!-- <pre>{{ hours_stats|pprint }}</pre> -->
+        <!-- <pre>{{ lecture_hours_table }}</pre> -->
+        <!-- <pre>{{ practical_hours_table }}</pre> -->
+    <!-- </div> -->
+
+    <div class="departmentContainer">
+        <h2 class="MainLabel">Department: {{ department.department_name }}</h2>
+    </div>
+    
+    <!-- bar graph of teacher vs hours/week -->
+    <div class="teacherVShourChartContainer">
+        <h3 class="graphHeading">Teacher Workload Across Years</h3>
+        <div class="teacherChartViewport">
+            <canvas id="teacherHourYearChart"></canvas>
+        </div>
+        <p class="chartHint">Hover bars to view full teacher names and exact hours.</p>
+
+        {% if teacher_year_chart_data.workload_analysis %}
+        <div class="workload-analysis-container">
+            <div class="workload-summary">
+                <h4><span class="workload-icon" aria-hidden="true">&#128202;</span> Workload Analysis Summary</h4>
+                <p class="workload-stats">
+                    Total Teachers: {{ teacher_year_chart_data.workload_analysis.total_teachers }} |
+                    Average Hours: {{ teacher_year_chart_data.workload_analysis.avg_hours|floatformat:1 }} hrs/week
+                </p>
+                <p class="workload-threshold">
+                    Recommended Range:
+                    {{ teacher_year_chart_data.thresholds.min|floatformat:0 }}-{{ teacher_year_chart_data.thresholds.max|floatformat:0 }} hrs/week
+                    |
+                    Ideal Range:
+                    {{ teacher_year_chart_data.thresholds.ideal_min|floatformat:0 }}-{{ teacher_year_chart_data.thresholds.ideal_max|floatformat:0 }} hrs/week
+                </p>
+            </div>
+
+            {% if teacher_year_chart_data.workload_analysis.overloaded %}
+            <div class="workload-category workload-overloaded">
+                <h5><span class="workload-icon" aria-hidden="true">&#9888;</span> Overloaded Teachers (> {{ teacher_year_chart_data.thresholds.max|floatformat:0 }} hrs/week)</h5>
+                <ul>
+                    {% for t in teacher_year_chart_data.workload_analysis.overloaded %}
+                    <li>{{ t.name }}: {{ t.hours|floatformat:1 }} hrs/week <span class="excess">({{ t.excess|floatformat:1 }} hrs above maximum)</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if teacher_year_chart_data.workload_analysis.underutilized %}
+            <div class="workload-category workload-underutilized">
+                <h5><span class="workload-icon" aria-hidden="true">&#128680;</span> Underutilized Teachers (< {{ teacher_year_chart_data.thresholds.min|floatformat:0 }} hrs/week)</h5>
+                <ul>
+                    {% for t in teacher_year_chart_data.workload_analysis.underutilized %}
+                    <li>{{ t.name }}: {{ t.hours|floatformat:1 }} hrs/week <span class="deficit">({{ t.deficit|floatformat:1 }} hrs below minimum)</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if teacher_year_chart_data.workload_analysis.balanced %}
+            <div class="workload-category workload-balanced">
+                <h5><span class="workload-icon" aria-hidden="true">&#10003;</span> Balanced Teachers ({{ teacher_year_chart_data.thresholds.min|floatformat:0 }}-{{ teacher_year_chart_data.thresholds.max|floatformat:0 }} hrs/week)</h5>
+                <ul>
+                    {% for t in teacher_year_chart_data.workload_analysis.balanced %}
+                    <li>{{ t.name }}: {{ t.hours|floatformat:1 }} hrs/week</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+
+
+
+    {% for year, data in display_tt.items %}
+        <div class="eachTimetableContainer">
+            <div class="eachTimetableHeader">
+                <h2 class="yearCount">{{ forloop.counter }}</h2>
+                <h2 class="yearNameLabel">Year: {{ year }}</h2>
+            </div>
+           <!--  validation of assigned hours vs expected hours -->
+            <div class="eachTimetableValidationContainer">
+                <!-- lecture table -->
+                <div class="lectureAssignedVSGivenContainer">
+                    {% for table_year, rows in lecture_hours_table.items %}
+                        {% if year == table_year %}
+                            <h3 class="subLabel">{{ year|title }} – Lecture Hours Validation</h3>
+
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Lecture</th>
+                                        <th>Expected Hours / Week</th>
+                                        <th>Assigned Hours / Week</th>
+                                        <!-- <th>Status</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in rows %}
+                                        <tr class="{% if not row.match %}table-danger{% else %}table-success{% endif %}">
+                                            <td>{{ row.lecture }}</td>
+                                            <td>{{ row.expected }}</td>
+                                            <td>{{ row.assigned }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+                <!-- practical table -->
+                <div class="practicalAssignedVSGivenContainer">
+                    {% for table_year, rows in practical_hours_table.items %}
+                        {% if table_year == year %}
+
+                            <h3 class="subLabel">{{ year|title }} – Practical Hours Validation</h3>
+
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Practical</th>
+                                        <th>Batch</th>
+                                        <th>Expected Hours / Week</th>
+                                        <th>Assigned Hours / Week</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in rows %}
+                                        <tr class="{% if not row.match %}table-danger{% else %}table-success{% endif %}">
+                                            <td>{{ row.practical }}</td>
+                                            <td>{{ row.batch }}</td>
+                                            <td>{{ row.expected }}</td>
+                                            <td>{{ row.assigned }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div> 
+
+
+            <h3 class="subLabel">Timetable Generated:</h3>
+            <table class="timeTable">
+                <tr>
+                    <th>Time</th>
+                    {% for day in data.days %}
+                        <th>{{ day }}</th>
+                    {% endfor %}
+                </tr>
+
+                {% for row in data.rows %}
+                    <tr>
+                        <td><strong>{{ row.time }}</strong></td>
+
+                        {# check if its recess row #}
+                        {% if row.cells.0 and row.cells.0.type == "recess" %}
+                            <td colspan="{{ data.days|length }}" class="recess">
+                                RECESS
+                            </td>
+
+                        {% else %}
+                            
+                            {% for cell in row.cells %}
+
+
+                                <td class="{{ cell.type}}">
+                                    {% if cell %}
+
+                                        {# if lecture #}
+                                        {% if cell.type == "lecture" %}
+                                            <div 
+                                            class="lectureCellContainer"
+                                            data-lecture="{{ cell.details.lecture }}">
+                                                <div class="LecCell_Name">
+                                                    <img src="{% static 'timetable/images/lecture2.svg' %}" alt="Lecture" width="15"> {{ cell.details.lecture }} 
+                                                </div>
+                                                <div class="cell_Fac">
+                                                    <img src="{% static 'timetable/images/person.svg' %}" alt="" width="15"> {{ cell.details.teacher }}
+                                                </div>
+                                                <div class="LecCell_Room">
+                                                    <img src="{% static 'timetable/images/classRoom.svg' %}" alt="" width="15"> {{ cell.details.classroom }}
+                                                </div>
+                                            </div>
+
+                                        {# if practical #}
+                                        {% elif cell.type == "practical" %}
+                                            {% for batch in cell.batches %}
+                                                <div 
+                                                class="practicalCellContainer"
+                                                data-practical="{{ batch.lab }}">
+                                                    <div class="pracCell_Name">
+                                                        <img src="{% static 'timetable/images/lab.svg' %}" alt="Practical" width="15"> {{ batch.lab }} 
+                                                    </div>
+                                                    <div class="cell_Fac">
+                                                        <img src="{% static 'timetable/images/person.svg' %}" alt="" width="15"> {{ batch.faculty }}
+                                                    </div>
+                                                    <div class="pracCell_Batch">
+                                                        <img src="{% static 'timetable/images/batchGroup.svg' %}" alt="" width="15"> {{ batch.batch }} 
+                                                    </div>
+                                                    <div class="pracCell_Room">
+                                                        <img src="{% static 'timetable/images/labRoom.svg' %}" alt="" width="15"> {{ batch.room }}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% else %}
+                                            _
+                                        {% endif %}
+
+
+
+                                    
+                                </td>
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endfor %}
+
+
+
+    <div class="saveFormContainer">
+        <form method="post" class="saveForm" autocomplete="off">
+            {% csrf_token %}
+            <input type="hidden" name="save" value="1">
+            <label for="timetableNameInput" class="saveFormLabel">Save this timetable</label>
+            <div class="saveFormActions">
+                <input
+                    id="timetableNameInput"
+                    type="text"
+                    name="name"
+                    class="saveInput"
+                    placeholder="Timetable name"
+                    autocomplete="off"
+                    spellcheck="false"
+                    required
+                >
+                <button type="submit" name="save" class="btn-md btn-green">Save timetable</button>
+                <a href="{% url 'timetable:department_saved_timetable_list' department.id %}" class="btn-md btn-red">Don't save</a>
+            </div>
+        </form>
+    </div>
+
+
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// generate distinct colors for each year
+function generateColor(index) {
+
+    const hue = (index * 240.5) % 360;   // golden angle
+    return `hsla(${hue}, 75%, 65%, 0.84)`;
+}
+
+const chartData = JSON.parse('{{ teacher_year_chart|escapejs }}');
+const teacherNames = Array.isArray(chartData.teachers) ? chartData.teachers : [];
+const isMobileScreen = window.matchMedia('(max-width: 768px)').matches;
+
+function compactTeacherLabel(fullName) {
+    const fallback = String(fullName || '').trim();
+    if (!fallback) return 'Unknown';
+
+    const honorifics = new Set(['mr', 'mrs', 'ms', 'miss', 'dr', 'prof']);
+    const filteredParts = fallback
+        .split(/\s+/)
+        .filter(Boolean)
+        .filter((part) => !honorifics.has(part.replace(/\./g, '').toLowerCase()));
+
+    if (filteredParts.length === 0) return fallback;
+    if (filteredParts.length === 1) return filteredParts[0];
+
+    const first = filteredParts[0];
+    const last = filteredParts[filteredParts.length - 1];
+    return `${first} ${last.charAt(0)}.`;
+}
+
+const compactTeacherLabels = teacherNames.map(compactTeacherLabel);
+
+const canvas = document.getElementById("teacherHourYearChart");
+const ctx = canvas.getContext("2d");
+
+function readThemeChartColors() {
+    const rootStyles = getComputedStyle(document.documentElement);
+    const bodyStyles = getComputedStyle(document.body);
+    const label = (rootStyles.getPropertyValue('--chart-label') || bodyStyles.getPropertyValue('--text-secondary') || '#b4bab7').trim();
+    const grid = (rootStyles.getPropertyValue('--chart-grid') || '#686868').trim();
+    return { label, grid };
+}
+
+// Build datasets dynamically (ANY number of years)
+const teacherCount = Math.max(teacherNames.length, 1);
+const yearEntries = Object.entries(chartData.years || {});
+const dynamicBarThickness = isMobileScreen ? 14 : (teacherCount > 20 ? 16 : 22);
+
+const datasets = yearEntries.map(
+    ([year, values], index) => ({
+        label: year.toUpperCase(),
+        data: values,
+        backgroundColor: generateColor(index),
+
+        borderWidth: 1,
+        barThickness: dynamicBarThickness,
+        maxBarThickness: isMobileScreen ? 18 : 28,
+    })
+);
+
+const chartColors = readThemeChartColors();
+
+const teacherChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+        labels: compactTeacherLabels,
+        datasets: datasets
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        resizeDelay: 100,
+        devicePixelRatio: window.devicePixelRatio || 1,
+        layout: {
+            padding: {
+                top: 8,
+                right: 8,
+                bottom: isMobileScreen ? 12 : 4,
+                left: 6,
+            }
+        },
+        scales: {
+            x: {
+                stacked: true,
+                title: { 
+                    display: true,
+                    text: "Teachers",
+                    color: chartColors.label,
+                    font:{
+                        size: 13,
+                        weight: '600'
+                    }
+                },
+                ticks:{
+                    autoSkip: true,
+                    maxTicksLimit: isMobileScreen ? 8 : 12,
+                    maxRotation: isMobileScreen ? 70 : 40,
+                    minRotation: isMobileScreen ? 70 : 40,
+                    color: chartColors.label,
+                    padding: 6,
+                    font: {
+                        size: isMobileScreen ? 10 : 11,
+                    },
+                },
+                grid:{
+                    display:false
+                }
+            },
+            y: {
+                stacked: true,
+                beginAtZero: true,
+                title: {
+                     display: true, 
+                     text: "Hours / Week",
+                     color: chartColors.label,
+                     font:{
+                        size: 14,
+                        weight: '600'
+                     },
+                },
+                ticks:{
+                    color: chartColors.label,
+                    precision: 0
+                },
+                grid:{
+                    display:true,
+                    color: chartColors.grid
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                mode: "index",
+                intersect: false,
+                callbacks: {
+                    title: function(items) {
+                        if (!items || !items.length) return '';
+                        const teacherIndex = items[0].dataIndex;
+                        return teacherNames[teacherIndex] || items[0].label;
+                    },
+                    label: function(context) {
+                        return `${context.dataset.label}: ${context.parsed.y} hrs/week`;
+                    }
+                }
+            },
+            legend: {
+                position: "top",
+                align: "start",
+                labels:{
+                    color: chartColors.label,
+                    font:{
+                        size: 12,
+                        weight: '600'
+                    },
+                    usePointStyle: true,
+                    pointStyle: 'rectRounded',
+                    boxWidth: 12,
+                    boxHeight: 12,
+                    padding: 14
+                }
+            }
+        }
+    }
+});
+
+window.addEventListener('resize', () => {
+    teacherChart.resize();
+});
+
+function refreshTeacherChartTheme() {
+    const next = readThemeChartColors();
+    teacherChart.options.scales.x.title.color = next.label;
+    teacherChart.options.scales.x.ticks.color = next.label;
+    teacherChart.options.scales.y.title.color = next.label;
+    teacherChart.options.scales.y.ticks.color = next.label;
+    teacherChart.options.scales.y.grid.color = next.grid;
+    teacherChart.options.plugins.legend.labels.color = next.label;
+    teacherChart.update('none');
+}
+
+document.addEventListener('themeChanged', refreshTeacherChartTheme);
+
+const themeObserver = new MutationObserver(() => {
+    refreshTeacherChartTheme();
+});
+
+themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+// for coloring lecture cells based on lecture name
+function stringToColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash) % 360;
+    return {
+        background: `hsla(${hue}, 30%, 40%, 0.5)`, // lighter + transparent
+        border: `hsl(${hue}, 55%, 40%)`             // darker + solid
+    }
+}
+
+document.querySelectorAll(".lectureCellContainer").forEach(el => {
+    const lecture = el.dataset.lecture;
+    const colors = stringToColor(lecture);
+
+    el.style.backgroundColor = colors.background;
+    el.style.border = `1.6px solid ${colors.border}`;
+});
+document.querySelectorAll(".practicalCellContainer").forEach(el => {
+    const practical = el.dataset.practical;
+    const colorsPrac = stringToColor(practical);
+
+    el.style.backgroundColor = colorsPrac.background;
+    el.style.border = `1.6px solid ${colorsPrac.border}`;
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'timetable/template.html' %}
+{% load static %}
+
+{% block title %}Error - Smart Timetable{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 700px; margin: 4rem auto; text-align: center;">
+    <div class="card" style="padding: 3rem 2rem;">
+
+        <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
+
+        <h1 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--text-primary);">
+            Timetable Generation Failed
+        </h1>
+
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.6;">
+            The scheduler could not produce a valid timetable with the current configuration.
+            This usually happens when there are not enough teachers, rooms, or time slots to
+            satisfy all constraints.
+        </p>
+
+        {% if validation_errors %}
+        <div style="
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            text-align: left;
+            margin-bottom: 2rem;
+        ">
+            <strong style="display:block; margin-bottom: 0.5rem;">Issues found:</strong>
+            <ul style="margin: 0; padding-left: 1.25rem; line-height: 1.9; font-size: 0.875rem;">
+                {% for err in validation_errors %}
+                <li>{{ err }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% elif error %}
+        <div style="
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            text-align: left;
+            margin-bottom: 2rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            word-break: break-word;
+        ">
+            <strong>Details:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        <h3 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.75rem; text-align: left;">
+            Common causes &amp; fixes:
+        </h3>
+        <ul style="text-align: left; color: var(--text-secondary); line-height: 1.8; font-size: 0.9rem; padding-left: 1.25rem; margin-bottom: 2rem;">
+            <li>Not enough teachers assigned to practicals — add more teachers or reduce practical hours.</li>
+            <li>More practical batches than available lab rooms — add more lab rooms or increase batch size.</li>
+            <li>Total lecture hours exceed available working hours in the week — reduce subject hours.</li>
+            <li>No classrooms or lab rooms assigned to a year — go to the year setup and allocate rooms.</li>
+            <li>A subject or practical has no teacher assigned to it.</li>
+        </ul>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            {% if department %}
+            <a href="{% url 'timetable:years' pk=department.id %}" class="btn-md btn-ghost">
+                ← Back to Department Setup
+            </a>
+            <a href="{% url 'timetable:generate_timetable' department_id=department.id %}" class="btn-md btn-indigo">
+                🔄 Try Again
+            </a>
+            {% else %}
+            <a href="{% url 'timetable:setup' %}" class="btn-md btn-ghost">
+                ← Back to Setup
+            </a>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

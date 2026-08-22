@@ -1,0 +1,473 @@
+
+{% load static %}
+<!--load static to use things stored in the static folder-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <!-- because django already knows static folder path therefore the actual path is timetable/static/ ....the rest which is written -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'timetable/css/theme.css'%}?v=2">
+    <link rel="stylesheet" href="{% static 'timetable/css/base.css'%}">
+    <link rel="stylesheet" href="{% static 'timetable/css/loading.css'%}">
+    <link rel="stylesheet" href="{% static 'timetable/css/toast.css'%}">
+    <link rel="stylesheet" href="{% static 'timetable/css/modal.css'%}">
+    <link rel="stylesheet" href="{% static 'timetable/css/breadcrumb.css'%}">
+    <link rel="stylesheet" href="{% static 'timetable/css/undoredo.css'%}">
+    <link rel="stylesheet" href="{% static 'timetable/css/batch_simple.css'%}?v=6">
+
+    {% block extra_css %} {% endblock %}
+    <link rel="stylesheet" href="{% static 'timetable/css/button_consistency.css'%}?v=2">
+    
+    <!-- Inline script to apply theme immediately (prevent flash) -->
+    <script>
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('timetable_theme');
+                if (savedTheme === 'light') {
+                    // Set background directly on html element - runs before CSS even loads
+                    document.documentElement.style.background = 'linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%)';
+                    document.documentElement.style.minHeight = '100%';
+                    document.documentElement.classList.add('light-theme-loading');
+                } else {
+                    // Also set dark background immediately to prevent any white flash
+                    document.documentElement.style.background = 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)';
+                    document.documentElement.style.minHeight = '100%';
+                }
+            } catch (e) {
+                // Silently fail if localStorage is not available
+            }
+        })();
+    </script>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+
+            <div class="logoSection">
+
+                <img class="logoIcon" src="{% static 'timetable/images/timetableLogo.svg' %}" alt="Home Icon" class="icon">
+                <div class="logo">SmartTimetable</div>
+
+            </div>
+            <ul class="nav-links">
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'timetable:home' %}" id="{% block nav_home %}{% endblock %}">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'timetable:setup' %}" id="{% block nav_setup %}{% endblock %}">Setup</a>
+                </li>
+
+                <li class="nav-user">
+                    <span class="nav-username">{{ user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}" style="margin:0;padding:0;display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-logout-btn">Logout</button>
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <div class="modal-icon danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <span id="modalTitleText">Confirm Action</span>
+                </h2>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message" id="modalMessage">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn modal-btn-cancel" id="modalCancelBtn">Cancel</button>
+                <button type="button" class="modal-btn modal-btn-confirm" id="modalConfirmBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+Breadcrumb Navigation -->
+    {% block breadcrumb %}{% endblock %}
+
+    <!-- 
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <div class="loading-text">Processing<span class="loading-dots"></span></div>
+            <div class="loading-subtext">Please wait while we complete your request</div>
+        </div>
+    </div>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <div class="footerBar">
+            &copy; 2026 SmartTimetable. All rights reserved.
+        </div>
+    </footer>
+    
+    <!-- Theme Script - Must load early to prevent flash -->
+    <script src="{% static 'timetable/js/theme.js' %}?v=2"></script>
+    
+    <!-- Data Persistence Script -->
+    <script src="{% static 'timetable/js/persistence.js' %}?v=2"></script>
+    
+    <!-- Undo/Redo Script -->
+    <script src="{% static 'timetable/js/undoredo.js' %}?v=2"></script>
+    
+    <!-- Batch Operations Script -->
+    <script src="{% static 'timetable/js/batch_simple.js' %}?v=3"></script>
+    
+    <!-- Performance Optimization Script -->
+    <script src="{% static 'timetable/js/performance.js' %}"></script>
+    
+    <!-- Loading Indicator Scripts -->
+    <script>
+        // Global loading functions
+        function showLoading(text = 'Processing', subtext = 'Please wait while we complete your request') {
+            const overlay = document.getElementById('loadingOverlay');
+            const loadingText = overlay.querySelector('.loading-text');
+            const loadingSubtext = overlay.querySelector('.loading-subtext');
+            
+            // Remove dots from text if present
+            const cleanText = text.replace(/<span class="loading-dots"><\/span>/, '');
+            loadingText.innerHTML = cleanText + '<span class="loading-dots"></span>';
+            loadingSubtext.textContent = subtext;
+            overlay.classList.add('active');
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.remove('active');
+        }
+
+        // Toast Notification Functions
+        function showToast(message, type = 'success', duration = 5000) {
+            const container = document.getElementById('toastContainer');
+            
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            // Icon based on type
+            const icons = {
+                success: '✓',
+                error: '✕',
+                warning: '⚠',
+                info: 'ℹ'
+            };
+            
+            // Titles based on type
+            const titles = {
+                success: 'Success',
+                error: 'Error',
+                warning: 'Warning',
+                info: 'Info'
+            };
+            
+            // Create toast HTML
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || icons.info}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${titles[type]}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="closeToast(this)">×</button>
+                <div class="toast-progress"></div>
+            `;
+            
+            // Add to container
+            container.appendChild(toast);
+            
+            // Auto remove after duration
+            setTimeout(() => {
+                closeToast(toast.querySelector('.toast-close'));
+            }, duration);
+        }
+
+        function closeToast(button) {
+            const toast = button.closest('.toast');
+            if (toast) {
+                toast.classList.add('toast-exit');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }
+        }
+
+        // ===================================
+        // CONFIRMATION MODAL FUNCTIONS
+        // ===================================
+        
+        let confirmCallback = null;
+        
+        function showConfirmModal(options) {
+            const {
+                title = 'Confirm Action',
+                message = 'Are you sure you want to proceed?',
+                confirmText = 'Confirm',
+                cancelText = 'Cancel',
+                type = 'danger', // danger, warning, info
+                onConfirm = () => {}
+            } = options;
+            
+            const modal = document.getElementById('confirmModal');
+            const titleElement = document.getElementById('modalTitleText');
+            const messageElement = document.getElementById('modalMessage');
+            const confirmBtn = document.getElementById('modalConfirmBtn');
+            const cancelBtn = document.getElementById('modalCancelBtn');
+            const icon = modal.querySelector('.modal-icon');
+            
+            // Set content
+            titleElement.textContent = title;
+            messageElement.innerHTML = message;
+            confirmBtn.textContent = confirmText;
+            cancelBtn.textContent = cancelText;
+            
+            // Set icon type
+            icon.className = `modal-icon ${type}`;
+            confirmBtn.className = `modal-btn modal-btn-confirm ${type}`;
+            
+            // Store callback
+            confirmCallback = onConfirm;
+            
+            // Show modal
+            modal.classList.add('active');
+            document.body.classList.add('modal-open');
+            
+            // Focus on cancel button by default (safer)
+            setTimeout(() => cancelBtn.focus(), 100);
+        }
+        
+        function hideConfirmModal() {
+            const modal = document.getElementById('confirmModal');
+            modal.classList.add('closing');
+            
+            setTimeout(() => {
+                modal.classList.remove('active', 'closing');
+                document.body.classList.remove('modal-open');
+                confirmCallback = null;
+            }, 200);
+        }
+        
+        function handleModalConfirm() {
+            if (confirmCallback) {
+                confirmCallback();
+            }
+            hideConfirmModal();
+        }
+        
+        function handleModalCancel() {
+            hideConfirmModal();
+        }
+        
+        // Initialize modal event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmBtn = document.getElementById('modalConfirmBtn');
+            const cancelBtn = document.getElementById('modalCancelBtn');
+            const modalOverlay = document.getElementById('confirmModal');
+            
+            if (confirmBtn) confirmBtn.addEventListener('click', handleModalConfirm);
+            if (cancelBtn) cancelBtn.addEventListener('click', handleModalCancel);
+            
+            // Close on backdrop click
+            if (modalOverlay) {
+                modalOverlay.addEventListener('click', function(e) {
+                    if (e.target === modalOverlay) {
+                        handleModalCancel();
+                    }
+                });
+            }
+            
+            // Close on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                    handleModalCancel();
+                }
+            });
+        });
+
+        // Show Django messages as toasts
+        function showDjangoMessages() {
+            /* eslint-disable */
+            // Django template tags below - not JavaScript
+            {% if messages %}
+                {% for message in messages %}
+                    showToast(
+                        '{{ message|escapejs }}',
+                        '{{ message.tags|default:"info" }}',
+                        5000
+                    );
+                {% endfor %}
+            {% endif %}
+            /* eslint-enable */
+        }
+
+        // Auto-hide loading on page load (in case of back navigation)
+        window.addEventListener('load', function() {
+            hideLoading();
+            showDjangoMessages();
+        });
+
+        // Also hide on pageshow (for browser back/forward navigation)
+        window.addEventListener('pageshow', function(event) {
+            // This fires even when page is loaded from cache
+            hideLoading();
+        });
+
+        // Show loading on form submissions
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form');
+            
+            forms.forEach(form => {
+                // Skip forms with data-no-loading attribute
+                if (form.hasAttribute('data-no-loading')) {
+                    return;
+                }
+
+                form.addEventListener('submit', function(e) {
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    
+                    // Add loading class to form
+                    form.classList.add('form-submitting');
+                    
+                    // Disable submit button
+                    if (submitButton) {
+                        submitButton.disabled = true;
+                        submitButton.classList.add('btn-loading');
+                    }
+
+                    // Show loading overlay
+                    let loadingText = 'Processing';
+                    let loadingSubtext = 'Please wait while we complete your request';
+
+                    // Customize loading text based on form
+                    if (form.closest('.saveFormContainer')) {
+                        loadingText = 'Saving Timetable';
+                        loadingSubtext = 'Your timetable is being saved';
+                    } else if (submitButton && submitButton.textContent.toLowerCase().includes('generate')) {
+                        loadingText = 'Generating Timetable';
+                        loadingSubtext = 'This may take a few minutes, please be patient';
+                    } else if (submitButton && submitButton.textContent.toLowerCase().includes('submit')) {
+                        loadingText = 'Submitting Data';
+                        loadingSubtext = 'Processing your submission';
+                    } else if (submitButton && submitButton.textContent.toLowerCase().includes('save')) {
+                        loadingText = 'Saving';
+                        loadingSubtext = 'Saving your data';
+                    } else if (submitButton && submitButton.textContent.toLowerCase().includes('delete')) {
+                        loadingText = 'Deleting';
+                        loadingSubtext = 'Removing the item';
+                    }
+
+                    showLoading(loadingText, loadingSubtext);
+                });
+            });
+
+            // Show loading on export links
+            const exportLinks = document.querySelectorAll('.export-btn[href*="export"]');
+            exportLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const text = link.textContent.includes('Excel') ? 'Exporting to Excel' : 'Exporting to PDF';
+                    showLoading(text, 'Preparing your download');
+                    
+                    // Hide loading after a delay (download should start)
+                    setTimeout(function() {
+                        hideLoading();
+                    }, 3000);
+                });
+            });
+
+            // ===================================
+            // HANDLE DELETE CONFIRMATIONS
+            // ===================================
+            
+            // Handle delete forms with confirmation modal
+            const deleteForms = document.querySelectorAll('.delete-form');
+            deleteForms.forEach(form => {
+                const button = form.querySelector('button');
+                if (button) {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        const itemName = form.dataset.itemName || 'this item';
+                        const itemType = form.dataset.itemType || 'item';
+                        
+                        showConfirmModal({
+                            title: `Delete ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`,
+                            message: `Are you sure you want to delete <strong>${itemName}</strong>?<br><br>This action cannot be undone.`,
+                            confirmText: 'Delete',
+                            cancelText: 'Cancel',
+                            type: 'danger',
+                            onConfirm: () => {
+                                // Show loading and submit form
+                                showLoading('Deleting', `Removing ${itemType}`);
+                                form.submit();
+                            }
+                        });
+                    });
+                }
+            });
+            
+            // Handle delete links with confirmation modal
+            const deleteLinks = document.querySelectorAll('a[data-delete-link]');
+            deleteLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const itemName = link.dataset.itemName || 'this item';
+                    const itemType = link.dataset.itemType || 'item';
+                    const deleteUrl = link.href;
+                    
+                    showConfirmModal({
+                        title: `Delete ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`,
+                        message: `Are you sure you want to delete <strong>${itemName}</strong>?<br><br>This action cannot be undone.`,
+                        confirmText: 'Delete',
+                        cancelText: 'Cancel',
+                        type: 'danger',
+                        onConfirm: () => {
+                            // Show loading and navigate to delete URL
+                            showLoading('Deleting', `Removing ${itemType}`);
+                            window.location.href = deleteUrl;
+                        }
+                    });
+                });
+            });
+
+            // Show loading on view/edit links if they're in the same app
+            const actionLinks = document.querySelectorAll('.viewTtbtn, .editBtn, .viewYearsBtn');
+            actionLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    showLoading('Loading', 'Please wait');
+                });
+            });
+        });
+    </script>
+    
+    {% block extra_js %}  {% endblock %}
+</body>
+</html>

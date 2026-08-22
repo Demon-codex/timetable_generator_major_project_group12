@@ -1,0 +1,39 @@
+{% extends 'timetable/template.html' %}
+{% load static %}
+
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'timetable/css/add_year_labrooms.css'%}?v=2"> {% endblock %}
+
+
+{% block content %}
+<div class="container">
+
+    <div class="form-container">
+        <h3 class="mainLabel">Assign Lab Rooms for {{ department.department_name }} – {{ year.year_name }}</h3>
+
+        <form id="assignLabroomsForm" method="post" class="assignYearLabsForm" data-undo-redo="true">
+            {% csrf_token %}
+
+            <div class="formGroup">
+                <p class="subLabel">Select Lab Rooms</p>
+
+                <div class="checkboxGroup">
+                    {% for checkbox in form.labrooms %}
+                        <label class="checkboxItem">
+                            {{ checkbox.tag }}
+                            {{ checkbox.choice_label }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn-md btn-blue btn-block">Save</button>
+        </form>
+
+    </div>
+
+    <a href="{% url 'timetable:years' department.id %}" class="btn-md btn-ghost btn-block">
+        Cancel
+    </a>
+</div>
+{% endblock %}

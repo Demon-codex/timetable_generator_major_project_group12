@@ -1,0 +1,532 @@
+
+main{
+    background-color: var(--bg-main);
+}
+/* ── Page header ── */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px 20px 20px;
+    border-bottom: 1px solid var(--border-primary);
+    max-width: 900px;
+    margin: 0 auto 24px;
+}
+.page-title {
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 5px;
+    letter-spacing: -0.4px;
+}
+.page-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+}
+.page-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+.btn-back:hover {
+    border-color: rgba(99, 102, 241, 0.5);
+    color: #a78bfa;
+    background: rgba(99, 102, 241, 0.08);
+}
+
+/* department card header */
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background: linear-gradient(135deg, var(--gradient-header-start), var(--gradient-header-end));
+  height: 80px;
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  margin-bottom: 15px;
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 500;
+  max-width: 1300px;
+  margin: 15px auto;
+  box-shadow: var(--shadow-md);
+}
+.mainContainer{
+    padding: 15px 20px;
+    background: linear-gradient(135deg, var(--gradient-container-start), var(--gradient-container-end));
+    margin-bottom: 25px;
+    max-width: 900px;
+    margin: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border-secondary);
+}
+
+.subjectContainer, .practicalContainer, .yearInfoContainer, .classRoomContainer, .labRoomContainer, .dataContainer{
+    box-sizing: border-box;
+    background: linear-gradient(135deg, var(--gradient-container-start), var(--gradient-container-end));
+    padding: 25px 40px;
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* header for each year */
+.yearInfoContainer{
+    font-size: 18px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background: linear-gradient(135deg, var(--gradient-table-header-start), var(--gradient-table-header-end));
+    border: 1px solid var(--border-secondary);
+    transition: all 0.3s ease;
+}
+
+/* label of each thing in year */
+h3, .dataLabel{
+    color: var(--text-primary);
+    margin: 18px 0px 12px 0px;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+.extraDataLabel{
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin: 10px 0px;
+    line-height: 1.6;
+}
+
+/* General text and paragraph styling */
+p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Time slots */
+.timeSlot{
+    padding: 8px 14px;
+    margin: 4px;
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    display: inline-block;
+    color: var(--text-primary);
+    background: var(--table-cell-bg);
+    transition: all 0.2s ease;
+    font-size: 14px;
+    font-weight: 500;
+}
+.timeSlot:hover {
+    background: var(--table-row-hover);
+    border-color: var(--border-secondary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+/* buttons */
+.createNewYearBtn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.28);
+    white-space: nowrap;
+}
+.createNewYearBtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.42);
+}
+
+/* override redirectbtn from setup.css – make it match the indigo style used in setup page header */
+.redirectbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 20px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.30);
+}
+.redirectbtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+    color: white;
+}
+
+.deleteYearBtn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.28);
+    white-space: nowrap;
+}
+.deleteYearBtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.42);
+}
+
+.yearInfoContainer:has(.deleteYearBtn:hover){
+    border: 1px solid rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.3);
+    background: linear-gradient(135deg, var(--gradient-table-header-start), var(--gradient-table-header-end));
+}
+
+/* ── Table-row action buttons (sm variant) ── */
+.deleteRowBtn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 4px rgba(239, 68, 68, 0.28);
+}
+.deleteRowBtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.40);
+}
+
+/* Edit Button Styling (table-row sm variant) */
+.editBtn, .editRowBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 4px rgba(59, 130, 246, 0.28);
+    text-decoration: none;
+}
+.editBtn:hover, .editRowBtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.40);
+    color: white;
+}
+
+.addRowBtn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    margin-top: 12px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.28);
+    white-space: nowrap;
+}
+.addRowBtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.42);
+}
+
+/* Editable Info Container */
+.editableInfoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+table{
+    border-collapse: collapse;
+    border: none;
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+}
+
+th, td{
+    padding: 12px 16px;
+    border: 1px solid var(--border-secondary);
+}
+th{
+    background: linear-gradient(135deg, var(--gradient-table-header-start), var(--gradient-table-header-end));
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+td {
+    background: var(--table-cell-bg);
+}
+tr:hover td {
+    background: var(--table-row-hover);
+}
+
+/* Keep Action column buttons aligned and uniform */
+.batch-table th:last-child,
+.batch-table td:last-child {
+    width: 180px;
+    text-align: center;
+}
+
+.action-cell-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.action-cell-buttons form {
+    margin: 0;
+    display: inline-flex;
+}
+
+.action-cell-buttons .deleteRowBtn,
+.action-cell-buttons .editRowBtn {
+    min-width: 74px;
+}
+
+.yearCount{
+    background: linear-gradient(135deg, var(--gradient-table-header-start), var(--gradient-table-header-end));
+    padding: 12px;
+    text-align: center;
+    border-radius: 6px;
+    border: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.dataContainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+/*  charts */
+.rightSide{
+    width: 340px;
+    height: 340px;
+    max-width: 340px;
+    background: linear-gradient(135deg, var(--gradient-container-start), var(--gradient-container-end));
+    border: 1px solid var(--border-accent);
+    border-radius: 16px;
+    padding: 14px 14px 10px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(8, 15, 35, 0.28);
+    transition: border-color 0.2s ease;
+    position: relative;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.rightSide::before {
+    content: none;
+}
+
+.rightSide:hover {
+    border-color: rgba(139, 92, 246, 0.5);
+}
+
+.year-donut-chart {
+    display: block;
+    width: 248px !important;
+    height: 248px !important;
+    max-width: 248px;
+    max-height: 248px;
+    margin: 4px auto 6px;
+}
+
+.year-chart-legend {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 12px;
+    margin-top: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.legend-text {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* ==================== CHECKBOX STYLING ==================== */
+/* Consistent checkbox sizing throughout the page */
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #6366f1;
+    border-radius: 4px;
+}
+
+.batch-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #6366f1;
+}
+
+.checkbox-col {
+    width: 45px;
+    text-align: center;
+    padding: 10px !important;
+}
+
+.checkbox-col input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #6366f1;
+}
+
+/* ==================== NO YEARS MESSAGE ==================== */
+.NoyearsFound{
+    color: rgb(134, 239, 172);
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+/* Tablet screens */
+@media screen and (max-width: 768px) {
+    .mainContainer {
+        padding: 15px 10px;
+    }
+
+    .yearsContainer {
+        padding: 15px;
+    }
+
+    .yearCard {
+        padding: 15px;
+    }
+}
+
+/* Mobile screens */
+@media screen and (max-width: 480px) {
+    .mainContainer {
+        padding: 10px 5px;
+    }
+
+    .yearsContainer {
+        padding: 10px;
+    }
+
+    .yearCard {
+        padding: 12px;
+    }
+
+    .yearHeader {
+        font-size: 18px;
+    }
+
+    .actionButtons {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .editBtn, .deleteBtn, .addSubjectBtn, .addPracticalBtn {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,494 @@
+{% extends 'timetable/template.html' %}
+
+{% load static %}
+{% block title %}years{% endblock %}
+
+{% block extra_css %} 
+    <link rel="stylesheet" href="{% static 'timetable/css/years.css'%}?v=13">
+{% endblock %}
+
+{% block nav_years %}activeNavPage{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:home' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="breadcrumb-icon">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                <span class="breadcrumb-text">Home</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:setup' %}">
+                <span class="breadcrumb-text">Setup</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-text">{{ department.department_name }}</span>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+
+    <!-- <div class="container">
+    <h1>Welcome years</h1>
+
+    <h2>Department: {{ department.department_name }}</h2>
+    {% if years_of_department %}
+
+
+        <ul>
+            {% for year in years_of_department %}
+                <li>{{ year.year_name }}</li>
+            {% endfor %}
+        </ul>
+
+
+
+    {% else %}
+        <p>No years found for this department.</p>
+        <a href="{% url 'timetable:yearsSetupForm' department.id %}" class="redirectbtn">Add Year</a>
+    {% endif %}
+    </div> -->
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">{{ department.department_name }}</h1>
+            <p class="page-subtitle">Manage years, subjects, practicals, classrooms and labs</p>
+        </div>
+        <div class="page-header-actions">
+            <a href="{% url 'timetable:setup' %}" class="btn-md btn-ghost btn-back">← Back to Setup</a>
+            <a href="{% url 'timetable:yearsSetupForm' department.id %}" class="btn-md btn-indigo redirectbtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+                Add Year
+            </a>
+        </div>
+    </div>
+
+    {% if has_years %}
+        {% for year in years_of_department %}
+
+               <div class="mainContainer">
+                    <div class="yearInfoContainer">
+                        <h3 class="yearCount">{{ forloop.counter}}. {{ year.year_name}}</h3>
+                        <!-- <h3>{{ year.year_name }}</h3> -->
+                        <p>Total students: {{ year.total_students }}</p>
+
+                        <form
+                            action="{% url 'timetable:delete_year' department.id year.id %}"
+                            method="post"
+                            style="display:inline;"
+                            class="delete-form"
+                            data-item-name="{{ year.year_name }}"
+                            data-item-type="year"
+                        >
+                            {% csrf_token %}
+                            <button class="btn-md btn-red deleteYearBtn" type="button">
+                                Delete Year
+                            </button>
+                        </form>
+                    </div>
+                    <div class="dataContainer">
+                        <div class="leftSide">
+                            <p class="dataLabel">All possible lecture time slots:</p>
+                            <p class="extraDataLabel">(Calculated from department)</p>
+                            <div>
+                                {% for slot in lecture_timeslots %}
+                                    <span class="timeSlot">{{ slot }}</span>
+                                {% endfor %}
+                            </div>
+                            <p class="dataLabel">All possible practical time slots:</p>
+                            <p class="extraDataLabel">(Calculated from department)</p>
+                            <div>
+                                {% for slot in practical_timeslots %}
+                                    <span class="timeSlot">{{ slot }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="editableInfoContainer">
+                                <p class="dataLabel">Number of students: {{ year.total_students}}</p>
+
+                                <a href="{% url 'timetable:edit_year_total_students' department.id year.id %}" class="btn-sm btn-blue editBtn">Edit</a>
+                            </div>
+                            <div class="editableInfoContainer">
+                                <p class="dataLabel">Number of students in each practical batch: {{ year.number_of_students_in_batch}}</p>
+
+                                <a href="{% url 'timetable:edit_year_students_in_batch' department.id year.id %}" class="btn-sm btn-blue editBtn">Edit</a>
+                            </div>
+                        </div>
+                        <div class="rightSide">
+                            <canvas 
+                            class="year-donut-chart" 
+                            data-lecture="{{ year.donutChart1_data.totalLectureHoursPerWeek }}"
+                            data-practical="{{ year.donutChart1_data.totalPracticalHoursPerWeek }}"
+                            data-unallocated = "{{ year.donutChart1_data.unAllocatedHoursPerWeek }}"
+
+                            data-total-recess-hours-in-week = "{{ total_recessHoursInWeek }}"
+                            data-total-working-hours-in-week = "{{ total_workingHoursInWeek}}"
+                            
+                            ></canvas>
+                            <div class="year-chart-legend" aria-label="Year hour distribution legend"></div>
+
+                        </div>
+
+                    </div>
+                    <div class="subjectContainer">
+                        <h3>Subjects:</h3>
+                        {% if year.subjects.all %}
+                            <table border="1" cellpadding="5" class="batch-table" id="subjectsTable_{{ year.id }}" data-delete-url="{% url 'timetable:batch_delete_subjects' department.id %}">
+                                <thead>
+                                <tr>
+                                    <th class="checkbox-col"><input type="checkbox" id="selectAllSubjects_{{ year.id }}" /></th>
+                                    <th>Subject</th>
+                                    <th>Teachers</th>
+                                    <th>Hours per week</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for subject in year.subjects.all %}
+
+                                <tr class="batch-item">
+                                    <td class="checkbox-col"><input type="checkbox" class="batch-checkbox" value="{{ subject.id }}" /></td>
+                                    <td>{{ subject.subject_name }}</td>
+                                    <td>
+                                        {% for teacher in subject.teachers.all %}
+                                            {{ teacher.teacher_name }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ subject.hours_per_week }}</td>
+                                    <td>
+                                        <div class="action-cell-buttons">
+                                            <form
+                                                action="{% url 'timetable:delete_subject' department.id subject.id %}"
+                                                method="post"
+                                                style="display:inline;"
+                                                class="delete-form"
+                                                data-item-name="{{ subject.subject_name }}"
+                                                data-item-type="subject"
+                                            >
+                                                {% csrf_token %}
+                                                <button class="btn-sm btn-red deleteRowBtn" type="button">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                            <a href="{% url 'timetable:edit_subject' department.id subject.id %}" class="btn-sm btn-blue editRowBtn">Edit</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>No subjects added yet.</p>
+                        {% endif %}
+
+                        <a href="{% url 'timetable:add_subject' department.id year.id %}" class="btn-md btn-green addRowBtn">Add Subject</a>
+                    </div>
+                    <div class="practicalContainer">
+                        <h3>Practicals:</h3>
+
+                        {% if year.practicals.all %}
+                            <table border="1" cellpadding="5" class="batch-table" id="practicalsTable_{{ year.id }}" data-delete-url="{% url 'timetable:batch_delete_practicals' department.id %}">
+                                <thead>
+                                <tr>
+                                    <th class="checkbox-col"><input type="checkbox" id="selectAllPracticals_{{ year.id }}" /></th>
+                                    <th>Practical</th>
+                                    <th>Teachers</th>
+                                    <th>Hours per week</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for practical in year.practicals.all %}
+                                <tr class="batch-item">
+                                    <td class="checkbox-col"><input type="checkbox" class="batch-checkbox" value="{{ practical.id }}" /></td>
+                                    <td>{{ practical.practical_name }}</td>
+
+                                    <td>
+                                        {% for teacher in practical.teachers.all %}
+                                            {{ teacher.teacher_name }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </td>
+
+                                    <td>
+                                        {% if practical.hours_per_week %}
+                                            {{ practical.hours_per_week }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <div class="action-cell-buttons">
+                                            <form
+                                                action="{% url 'timetable:delete_practical' department.id practical.id %}"
+                                                method="post"
+                                                style="display:inline;"
+                                                class="delete-form"
+                                                data-item-name="{{ practical.practical_name }}"
+                                                data-item-type="practical"
+                                            >
+                                                {% csrf_token %}
+                                                <button class="btn-sm btn-red deleteRowBtn" type="button">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                            <a href="{% url 'timetable:edit_practical' department.id practical.id %}" class="btn-sm btn-blue editRowBtn">Edit</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>No practicals added.</p>
+                        {% endif %}
+
+                        <a href="{% url 'timetable:add_practical' department.id year.id %}" class="btn-md btn-green addRowBtn">Add Practical</a>
+                    </div>
+
+                    <div class="classRoomContainer">
+                        <h3>Clasrooms:</h3>
+
+                        {% if year.yearClassRoomsAllocated %}
+                            <table border="1" cellpadding="5">
+                                <tr>
+                                    <th>Classroom</th>
+                                    <th>Capacity</th>
+                                </tr>
+
+                                {% for eachClassroom in year.yearClassRoomsAllocated.classrooms.all %}
+                                <tr>
+                                    <td>{{ eachClassroom.classroom_id }}</td>
+                                    <td>{{ eachClassroom.classroom_capacity }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            <p>No Classrooms added.</p>
+                        {% endif %}
+
+                        <a href="{% url 'timetable:add_year_classrooms' department.id year.id %}" class="btn-md btn-green addRowBtn">Change Class rooms</a>
+                    </div>
+
+                    <div class="labRoomContainer">
+                        <h3>Practical Labs:</h3>
+
+                        {% if year.yearLabRoomsAllocated %}
+                            <table border="1" cellpadding="5">
+                                <tr>
+                                    <th>Lab</th>
+                                    <th>Capacity</th>
+                                </tr>
+
+                                {% for eachLabroom in year.yearLabRoomsAllocated.labrooms.all %}
+                                <tr>
+                                    <td>{{ eachLabroom.labroom_id }}</td>
+                                    <td>{{ eachLabroom.labroom_capacity }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            <p>No Practical Labs added.</p>
+                        {% endif %}
+
+                        <a href="{% url 'timetable:add_year_labrooms' department.id year.id %}" class="btn-md btn-green addRowBtn">Change Practical Labs</a>
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <p class="NoyearsFound">No years created for this department. Use "Create New year" button to create one.</p>
+        {% endif %}
+        
+{% endblock %}
+
+{% block extra_js %} 
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- for labels chart -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script>
+
+    // Store chart instances for updating on theme change
+    let chartInstances = [];
+
+    // Function to create/update charts based on current theme
+    function createCharts() {
+        // Destroy existing charts
+        chartInstances.forEach(chart => chart.destroy());
+        chartInstances = [];
+
+        // Detect current theme for chart text colors
+        const isLightTheme = document.body.classList.contains('light-theme');
+        const legendTextColor = isLightTheme ? 'rgb(15, 23, 42)' : 'rgb(226, 232, 240)';
+        const tooltipBgColor = isLightTheme ? 'rgba(248, 250, 252, 0.98)' : 'rgba(15, 23, 42, 0.98)';
+        const tooltipTitleColor = isLightTheme ? 'rgb(15, 23, 42)' : 'rgb(226, 232, 240)';
+        const tooltipBodyColor = isLightTheme ? 'rgb(51, 65, 85)' : 'rgb(203, 213, 225)';
+        const tooltipBorderColor = isLightTheme ? 'rgba(139, 92, 246, 0.3)' : 'rgba(139, 92, 246, 0.5)';
+
+        // donut chart for year timeslots 
+        const charts = document.querySelectorAll('.year-donut-chart');
+    // when no years added
+    // if (!charts.length) {
+    //     console.warn("No year charts found — skipping chart rendering");
+    //     return;
+    // }
+
+
+    charts.forEach(canvas => {
+        if (!canvas) return;
+        // HiDPI fix: render at 2x pixel density
+        const cssWidth = 248;
+        const cssHeight = 248;
+        const dpr = 2;
+        canvas.width = cssWidth * dpr;
+        canvas.height = cssHeight * dpr;
+        canvas.style.width = cssWidth + 'px';
+        canvas.style.height = cssHeight + 'px';
+
+        const lectureHours = Number(canvas.dataset.lecture) || 0;
+        const practicalHours = Number(canvas.dataset.practical) || 0;
+        const unAllocatedHours = Number(canvas.dataset.unallocated) || 0;
+
+        const recesshrs = Number(canvas.dataset.totalRecessHoursInWeek) || 0;
+        const maxhr = Number(canvas.dataset.totalWorkingHoursInWeek)
+        let data, labels, colors;
+
+        if (unAllocatedHours < 0){
+            const allocatedhr = lectureHours + practicalHours + recesshrs;
+            const overflowhr = allocatedhr - maxhr;
+            data = [maxhr, overflowhr];
+            labels = ['Max availabe Hours','Overflowing Hours'];
+            colors = ['#7bc075','#ff4c4c'];
+            const card = canvas.closest('.rightSide');
+            card.style.border = '1px solid #ff4c4c';
+        } else {
+            data = [unAllocatedHours,lectureHours, practicalHours, recesshrs];
+            labels = ['Available','Lecture', 'Practical', 'Recess'];
+            colors = [
+                '#14b8a6',  // Teal for available hours
+                '#6366f1',  // Indigo for lectures
+                '#ec4899',  // Pink for practicals
+                '#84cc16'   // Lime for recess
+            ];
+        }
+
+        const chartInstance = new Chart(canvas.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors,
+                    borderWidth: 0,
+                    spacing: 3,
+                    borderRadius: 8,
+                    hoverOffset: 8,
+                    hoverBorderWidth: 0,
+                }]
+            },
+            options: {
+                cutout: '70%',
+                responsive: false,
+                maintainAspectRatio: false,
+                animation: {
+                    animateRotate: true,
+                    animateScale: true,
+                    duration: 800,
+                    easing: 'easeInOutCubic'
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: tooltipBgColor,
+                        titleColor: tooltipTitleColor,
+                        bodyColor: tooltipBodyColor,
+                        borderColor: tooltipBorderColor,
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 6,
+                        titleFont: {
+                            size: 14,
+                            weight: '600'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return ` ${value} hours (${percentage}%)`;
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    intersect: true
+                }
+            }
+        });
+
+        // Store chart instance for later updates
+        chartInstances.push(chartInstance);
+
+        // Render crisp HTML legend text below each chart
+        const legendContainer = canvas.parentElement.querySelector('.year-chart-legend');
+        if (legendContainer) {
+            const total = data.reduce((a, b) => a + b, 0);
+            legendContainer.innerHTML = labels.map((label, i) => {
+                const value = data[i];
+                const percent = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
+                return `
+                    <span class="legend-item">
+                        <span class="legend-dot" style="background:${colors[i]}"></span>
+                        <span class="legend-text">${label}: ${value}h (${percent}%)</span>
+                    </span>
+                `;
+            }).join('');
+        }
+    });
+    }
+
+    // Create charts on page load
+    createCharts();
+
+    // Listen for theme changes and recreate charts
+    document.addEventListener('themeChanged', function() {
+        createCharts();
+    });
+
+
+
+
+    //  to restore scroll position on page reload
+    window.addEventListener("beforeunload", function () {
+        localStorage.setItem("scrollPos", window.scrollY);
+    });
+
+    window.addEventListener("load", function () {
+        const scrollPos = localStorage.getItem("scrollPos");
+        if (scrollPos) {
+            window.scrollTo(0, scrollPos);
+            localStorage.removeItem("scrollPos");
+        }
+    });
+
+</script>
+{% endblock %}

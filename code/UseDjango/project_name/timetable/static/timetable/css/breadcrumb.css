@@ -1,0 +1,265 @@
+/* ===================================
+   BREADCRUMB NAVIGATION STYLES
+   ===================================
+   Hierarchical navigation showing current page location
+*/
+
+.breadcrumb-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 16px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.breadcrumb {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.breadcrumb-item a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.breadcrumb-item a:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.breadcrumb-item a:active {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Home icon */
+.breadcrumb-item a .breadcrumb-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* Separator */
+.breadcrumb-separator {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    user-select: none;
+}
+
+/* Current page (not a link) */
+.breadcrumb-item.active {
+    color: white;
+    font-weight: 500;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+}
+
+/* Back button */
+.back-button-container {
+    max-width: 1200px;
+    margin: 24px auto 16px;
+    padding: 0 24px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: white;
+    color: #374151;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.back-button:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateX(-3px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.back-button:active {
+    transform: translateX(-2px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.back-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Page header with title */
+.page-header {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+    padding: 0 24px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 8px 0;
+}
+
+.page-subtitle {
+    font-size: 16px;
+    color: #6b7280;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .breadcrumb-container {
+        padding: 12px 0;
+    }
+    
+    .breadcrumb {
+        padding: 0 16px;
+        gap: 6px;
+    }
+    
+    .breadcrumb-item {
+        font-size: 13px;
+    }
+    
+    .breadcrumb-item a,
+    .breadcrumb-item.active {
+        padding: 4px 8px;
+    }
+    
+    .breadcrumb-separator {
+        font-size: 14px;
+    }
+    
+    .back-button-container {
+        margin: 16px auto 12px;
+        padding: 0 16px;
+    }
+    
+    .back-button {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+    
+    .page-header {
+        padding: 0 16px;
+        margin-bottom: 16px;
+    }
+    
+    .page-title {
+        font-size: 24px;
+    }
+    
+    .page-subtitle {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .breadcrumb {
+        gap: 4px;
+    }
+    
+    .breadcrumb-item {
+        font-size: 12px;
+    }
+    
+    /* Hide breadcrumb text on very small screens, keep icons */
+    .breadcrumb-item a .breadcrumb-text {
+        display: none;
+    }
+    
+    .breadcrumb-item.active .breadcrumb-text {
+        display: inline;
+    }
+    
+    .page-title {
+        font-size: 20px;
+    }
+}
+
+/* Context menu / Quick actions */
+.quick-actions {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+    padding: 0 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.quick-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #3b82f6;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.quick-action-btn:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.quick-action-btn:active {
+    transform: translateY(0);
+}
+
+.quick-action-btn.secondary {
+    background: white;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.quick-action-btn.secondary:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.quick-action-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+@media (max-width: 640px) {
+    .quick-actions {
+        padding: 0 16px;
+    }
+    
+    .quick-action-btn {
+        font-size: 13px;
+        padding: 7px 14px;
+    }
+}

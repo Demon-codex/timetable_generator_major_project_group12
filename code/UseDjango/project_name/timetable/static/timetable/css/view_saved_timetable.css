@@ -1,0 +1,673 @@
+
+
+.mainContainer{
+    padding: 10px 100px;
+    background-color: var(--bg-main);
+    margin-bottom: 20px;
+    max-width: 1200px;
+    margin: auto;
+
+}
+.departmentContainer{
+    padding: 10px;
+}
+.MainLabel{
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+.eachTimetableContainer{
+    margin-bottom: 40px;
+
+
+    background-color: var(--bg-main);
+    padding: 40px 50px;
+}
+/*     background-color: rgb(38, 38, 38);
+    padding: 30px 50px;
+    border: 1px solid rgb(74, 74, 74);
+    border-radius: 10px;
+    margin-bottom: 20px; */
+
+.eachTimetableHeader{
+  border: 1px solid var(--border-primary);
+  background-color: var(--bg-card);
+
+  margin-bottom: 20px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  height: 70px;
+
+  color: var(--text-primary);
+  font-size: 20px;
+  max-width: 1300px;
+
+
+}
+/* yearCounter */
+.yearCount{
+    background-color: var(--table-cell-bg);
+    padding: 10px;
+
+    text-align: center;
+    /* box-shadow: 0px 0px 7px rgba(155, 133, 241, 0.956); */
+    border-radius: 5px;
+    border: 1px solid var(--border-primary);
+}
+.eachTimetableValidationContainer{
+    background-color: var(--bg-main);
+    padding: 20px 50px;
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    margin-bottom: 20px;
+
+}
+
+.timeTable{
+    background-color: var(--bg-main);
+    padding: 30px 50px;
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    margin-bottom: 20px;
+
+}
+/* timetable table styling */
+
+table{
+    border-collapse: collapse;
+    border: none;
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+}
+
+th, td{
+    padding: 10px;
+    border: 1px solid var(--border-primary);
+}
+th{
+    background-color: var(--bg-card);
+}
+
+/* timetable cells types */
+.recess {
+    text-align: center;
+    font-weight: bold;
+    background-color: var(--bg-tertiary);
+    border: 2px solid var(--border-primary);
+
+
+}
+/* .lecture{
+    background-color: rgba(155, 154, 155, 0.08);
+
+
+
+
+}
+.practical{
+    background-color: rgba(116, 121, 221, 0.08);
+
+
+} */
+.timeTable td:hover {
+    background-color: var(--table-row-hover);
+    transition: background-color 0.2s ease;
+}
+.lectureCellContainer{
+    /* border: 1.5px solid rgba(39, 8, 66, 0.638);
+    background-color: rgba(171, 131, 244, 0.188); */
+    padding: 5px;
+    border-radius: 8px;
+    line-height: 1.3;
+    box-shadow: var(--shadow-sm);
+}
+.practicalCellContainer{
+    /* border: 1.5px solid rgba(39, 8, 66, 0.638);
+    background-color: rgba(221, 118, 244, 0.188); */
+    padding: 5px;
+    border-radius: 8px;
+    line-height: 1.3;
+    box-shadow: var(--shadow-sm);
+
+    margin-bottom: 5px;
+}
+/* teacher vs hour chart */
+.teacherVShourChartContainer{
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    padding: 40px;
+    margin-top: 20px;
+    border-radius: 5px;
+    max-width: 1100px;
+    max-height: 400px;
+    margin-bottom: 20px;
+
+}
+.graphHeading{
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: var(--text-secondary);
+}
+
+/* button */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.backbtn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    padding: 9px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.backbtn:hover {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.45);
+    color: #a78bfa;
+    transform: translateY(-1px);
+}
+
+.export-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.excel-btn {
+    background: linear-gradient(135deg, #217346, #3d9970);
+    box-shadow: 0 2px 8px rgba(33, 115, 70, 0.28);
+}
+
+.excel-btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(33, 115, 70, 0.42);
+}
+
+.pdf-btn {
+    background: linear-gradient(135deg, #d32f2f, #f44336);
+    box-shadow: 0 2px 8px rgba(211, 47, 47, 0.28);
+}
+
+.pdf-btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(211, 47, 47, 0.42);
+}
+
+.print-btn {
+    background: linear-gradient(135deg, #5e35b1, #7e57c2);
+    border: none;
+    box-shadow: 0 2px 8px rgba(94, 53, 177, 0.28);
+}
+
+.print-btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(94, 53, 177, 0.42);
+}
+
+/* label */
+.yearNameLabel{
+    color: var(--text-secondary);
+    font-size: 25px;
+}
+.subLabel{
+    color: var(--text-secondary);
+    font-size: 21px;
+    margin: 20px 0px;
+}
+.subLabelSmall{
+    color: var(--text-tertiary);
+    font-size: 15px;
+
+}
+
+/* remove default arrow */
+summary::-webkit-details-marker {
+    display: none;
+}
+summary::marker {
+    content: "";
+}
+
+/* summary bar */
+.dropdown-header {
+    cursor: pointer;
+    padding: 14px 18px;
+    background-color: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 21px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+}
+
+/* custom arrow */
+.dropdown-header::after {
+    content: "▾";
+    font-size: 50px;
+    color: var(--text-secondary);
+    transition: transform 0.25s ease;
+}
+
+/* rotate arrow when open */
+details[open] .dropdown-header::after {
+    transform: rotate(180deg);
+}
+
+.pracCell_Name, .cell_Fac, .pracCell_Room{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.LecCell_Name,
+.pracCell_Name {
+    font-weight: 600;
+}
+
+
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+/* Tablet screens */
+@media screen and (max-width: 1024px) {
+    .mainContainer {
+        padding: 10px 20px;
+    }
+
+    .action-buttons {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .teacherVShourChartContainer {
+        padding: 15px;
+    }
+
+    .eachTimetableContainer {
+        padding: 20px 15px;
+    }
+}
+
+/* Mobile screens */
+@media screen and (max-width: 768px) {
+    .mainContainer {
+        padding: 10px;
+    }
+
+    .MainLabel {
+        font-size: 20px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .backbtn,
+    .export-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .eachTimetableContainer {
+        padding: 15px 10px;
+    }
+
+    .eachTimetableHeader {
+        flex-direction: column;
+        height: auto;
+        gap: 10px;
+    }
+
+    .yearNameLabel {
+        font-size: 20px;
+    }
+
+    .subLabel {
+        font-size: 18px;
+    }
+
+    /* Make tables scrollable horizontally */
+    .timeTable {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 100%;
+        font-size: 11px;
+    }
+
+    th, td {
+        padding: 6px 4px;
+        font-size: 10px;
+    }
+
+    .cell_Subj, .cell_Fac, .cell_Room,
+    .pracCell_Name, .pracCell_Room {
+        font-size: 9px;
+    }
+
+    .teacherVShourChartContainer {
+        padding: 10px;
+    }
+
+    .graphHeading {
+        font-size: 16px;
+    }
+}
+
+/* Extra small mobile screens */
+@media screen and (max-width: 480px) {
+    .mainContainer {
+        padding: 5px;
+    }
+
+    .MainLabel {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+
+    .action-buttons {
+        gap: 8px;
+    }
+
+    .backbtn {
+        font-size: 12px;
+        padding: 8px;
+        width: 100%;
+    }
+
+    .export-btn {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+
+    .eachTimetableContainer {
+        padding: 10px 5px;
+        margin-bottom: 30px;
+    }
+
+    .eachTimetableHeader {
+        padding: 8px;
+    }
+
+    .yearCount {
+        font-size: 16px;
+        padding: 8px;
+    }
+
+    .yearNameLabel {
+        font-size: 18px;
+    }
+
+    .dropdown-header {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .dropdown-header::after {
+        font-size: 30px;
+    }
+
+    .subLabel {
+        font-size: 16px;
+    }
+
+    .subLabelSmall {
+        font-size: 13px;
+    }
+
+    table {
+        font-size: 9px;
+    }
+
+    th, td {
+        padding: 4px 2px;
+        font-size: 9px;
+    }
+
+    .cell_Subj, .cell_Fac, .cell_Room,
+    .pracCell_Name, .pracCell_Room {
+        font-size: 8px;
+        line-height: 1.3;
+    }
+
+    .labelPracticalBatch {
+        font-size: 14px;
+    }
+
+    .teacherVShourChartContainer {
+        padding: 8px;
+    }
+
+    .graphHeading {
+        font-size: 14px;
+    }
+}
+/* ==================== PRINT STYLES ==================== */
+@media print {
+    /* Reset page margins */
+    @page {
+        margin: 0.5cm;
+        size: A4 landscape;
+    }
+
+    /* Hide navigation and action buttons */
+    nav,
+    .action-buttons,
+    .backbtn,
+    .export-btn,
+    .teacherVShourChartContainer {
+        display: none !important;
+    }
+
+    /* Reset background colors for print */
+    body,
+    .mainContainer,
+    .departmentContainer,
+    .eachTimetableContainer,
+    .eachTimetableHeader,
+    .eachTimetableValidationContainer,
+    .timeTable,
+    .dropdown-header,
+    .dropdown-content {
+        background-color: white !important;
+        color: black !important;
+    }
+
+    /* Department header */
+    .departmentContainer {
+        padding: 10px 0;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #000;
+    }
+
+    .MainLabel {
+        color: black !important;
+        font-size: 18px;
+        margin: 5px 0;
+        text-align: center;
+    }
+
+    /* Year headers */
+    .eachTimetableContainer {
+        page-break-inside: avoid;
+        margin-bottom: 30px;
+        padding: 0;
+    }
+
+    .eachTimetableHeader {
+        background-color: #f0f0f0 !important;
+        color: black !important;
+        border: 2px solid #333 !important;
+        padding: 8px;
+        margin-bottom: 15px;
+    }
+
+    .yearCount,
+    .yearNameLabel {
+        color: black !important;
+        font-weight: bold;
+    }
+
+    /* Force details to be open */
+    details {
+        display: block !important;
+    }
+
+    details[open],
+    details {
+        display: block !important;
+    }
+
+    summary {
+        display: none !important;
+    }
+
+    .dropdown-content {
+        display: block !important;
+        padding: 0 !important;
+    }
+
+    /* Validation tables */
+    .eachTimetableValidationContainer {
+        padding: 10px 0;
+        border: none;
+        margin-bottom: 15px;
+    }
+
+    .subLabel,
+    .subLabelSmall {
+        color: black !important;
+        font-size: 14px;
+        font-weight: bold;
+        margin: 10px 0 5px 0;
+    }
+
+    /* Tables */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white !important;
+        color: black !important;
+        margin-bottom: 15px;
+        page-break-inside: auto;
+    }
+
+    th, td {
+        border: 1px solid #333 !important;
+        padding: 6px 4px;
+        color: black !important;
+        font-size: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #e0e0e0 !important;
+        font-weight: bold;
+    }
+
+    /* Timetable cells */
+    .recess {
+        background-color: #f5f5f5 !important;
+        font-weight: bold;
+    }
+
+    .lecture td,
+    .practical td {
+        background-color: white !important;
+    }
+
+    /* Status indicators */
+    .table-success {
+        background-color: #e8f5e9 !important;
+    }
+
+    .table-danger {
+        background-color: #ffebee !important;
+    }
+
+    /* Cell content */
+    .cell_Subj,
+    .cell_Fac,
+    .cell_Room,
+    .pracCell_Name,
+    .pracCell_Room {
+        display: block;
+        font-size: 9px;
+        line-height: 1.2;
+    }
+
+    /* Batch labels */
+    .labelPracticalBatch {
+        color: black !important;
+        font-weight: bold;
+        font-size: 12px;
+        margin: 10px 0 5px 0;
+    }
+
+    /* Page breaks */
+    .eachTimetableContainer {
+        page-break-after: auto;
+        page-break-inside: avoid;
+    }
+
+    .timeTable {
+        page-break-inside: avoid;
+    }
+
+    /* Ensure main container has no background */
+    .mainContainer {
+        padding: 0;
+        max-width: 100%;
+    }
+
+    /* Hide any hover effects */
+    *:hover {
+        background-color: inherit !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+}
+

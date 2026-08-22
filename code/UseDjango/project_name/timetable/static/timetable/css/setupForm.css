@@ -1,0 +1,350 @@
+/* =====================================================
+   Setup Form � clean modern redesign  v2
+   ===================================================== */
+
+/* -- Page wrapper ----------------------------------- */
+.mainContainer {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+    background-color: var(--bg-main);
+}
+
+/* -- Section cards ---------------------------------- */
+.basicInfo,
+.recessInfo,
+.teacherInfo,
+.classroomInfo,
+.labroomInfo {
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: 14px;
+    padding: 28px 28px 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-md);
+    transition: box-shadow 0.2s ease;
+}
+
+.basicInfo:hover,
+.recessInfo:hover,
+.teacherInfo:hover,
+.classroomInfo:hover,
+.labroomInfo:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+/* -- Section headings ------------------------------- */
+.basicInfo h3,
+.recessInfo h3,
+.teacherInfo h3,
+.classroomInfo h3,
+.labroomInfo h3 {
+    color: var(--text-primary);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.basicInfo h3::before    { content: ''; display: inline-block; width: 4px; height: 18px; border-radius: 3px; background: #6366f1; flex-shrink: 0; }
+.recessInfo h3::before   { content: ''; display: inline-block; width: 4px; height: 18px; border-radius: 3px; background: #f59e0b; flex-shrink: 0; }
+.teacherInfo h3::before  { content: ''; display: inline-block; width: 4px; height: 18px; border-radius: 3px; background: #10b981; flex-shrink: 0; }
+.classroomInfo h3::before{ content: ''; display: inline-block; width: 4px; height: 18px; border-radius: 3px; background: #3b82f6; flex-shrink: 0; }
+.labroomInfo h3::before  { content: ''; display: inline-block; width: 4px; height: 18px; border-radius: 3px; background: #ec4899; flex-shrink: 0; }
+
+/* -- Top-level form fields (basicInfo) -------------- */
+.form-field {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.form-field label {
+    background: none;
+    padding: 0;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: right;
+}
+
+.form-field .field-error {
+    grid-column: 2;
+}
+
+/* -- Inputs ----------------------------------------- */
+input[type="text"],
+input[type="number"],
+input[type="time"],
+select,
+.input {
+    width: 100%;
+    padding: 9px 13px;
+    border-radius: 8px;
+    border: 1px solid var(--border-primary);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="time"]:focus,
+select:focus,
+.input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+}
+
+/* -- Repeating rows (recess / teacher / classroom / lab) */
+.recess-form,
+.teacher-form,
+.classroom-form,
+.lab-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    transition: background 0.15s;
+}
+
+.recess-form:hover,
+.teacher-form:hover,
+.classroom-form:hover,
+.lab-form:hover {
+    background: var(--table-row-hover);
+}
+
+/* Labels inside repeating rows (exclude delete-check toggle) */
+.recess-form label:not(.delete-check),
+.teacher-form label:not(.delete-check),
+.classroom-form label:not(.delete-check),
+.lab-form label:not(.delete-check) {
+    background: rgba(99, 102, 241, 0.12);
+    color: #818cf8;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    margin: 0;
+}
+
+/* Inputs inside repeating rows */
+.recess-form input,
+.teacher-form input,
+.classroom-form input,
+.lab-form input {
+    width: auto;
+    flex: 1;
+    min-width: 120px;
+}
+
+/* -- Add buttons: only page-specific overrides ----- */
+#add-classroom::before { content: '+ '; }
+#add-lab::before       { content: '+ '; }
+#add-teacher::before   { content: '+ '; }
+#add-recess::before    { content: '+ '; }
+
+
+/* -- Delete-check toggle (existing rows) ----------- */
+/* Looks identical to .btn-sm .btn-red; checkbox hidden */
+.delete-check {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.28);
+    white-space: nowrap;
+    margin: 0;
+    flex-shrink: 0;
+    user-select: none;
+    line-height: 1;
+}
+
+.delete-check:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.42);
+}
+
+.delete-check:active {
+    transform: translateY(0);
+}
+
+/* When checked → show "marked for deletion" state */
+.delete-check:has(input:checked) {
+    background: linear-gradient(135deg, #b91c1c, #991b1b);
+    box-shadow: 0 0 0 2px #fca5a5, 0 2px 8px rgba(239, 68, 68, 0.35);
+}
+
+/* Hide the checkbox — the whole label is clickable */
+.delete-check input[type="checkbox"] {
+    display: none !important;
+}
+
+/* Clearer keyboard/mouse focus style for delete controls */
+.delete-check:focus-within,
+.remove-recess:focus-visible,
+.remove-teacher:focus-visible,
+.remove-classroom:focus-visible,
+.remove-lab:focus-visible {
+    outline: 2px solid rgba(96, 165, 250, 0.75);
+    outline-offset: 2px;
+}
+
+
+
+/* -- Error styles ----------------------------------- */
+.error-container {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    border-left: 5px solid #c92a2a;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: slideDown 0.3s ease-out;
+}
+
+.error-icon { font-size: 22px; flex-shrink: 0; }
+.error-messages { flex: 1; }
+
+.error-message {
+    color: #fff;
+    font-weight: 500;
+    margin: 4px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.field-error { margin-top: 4px; margin-bottom: 8px; }
+
+.error-text {
+    display: block;
+    color: #f87171;
+    background: rgba(248,113,113,0.1);
+    border-left: 3px solid #f87171;
+    padding: 7px 11px;
+    border-radius: 5px;
+    font-size: 13px;
+    margin: 3px 0;
+    font-weight: 500;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* -- Responsive ------------------------------------- */
+@media screen and (max-width: 720px) {
+    .mainContainer { padding: 16px 10px 40px; }
+    .basicInfo, .recessInfo, .teacherInfo,
+    .classroomInfo, .labroomInfo { padding: 20px 16px 16px; }
+    .form-field { grid-template-columns: 1fr; }
+    .form-field label { text-align: left; }
+    .form-field .field-error { grid-column: 1; }
+}
+
+@media screen and (max-width: 480px) {
+    .recess-form, .teacher-form, .classroom-form, .lab-form {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .recess-form input, .teacher-form input,
+    .classroom-form input, .lab-form input { width: 100%; }
+    #add-classroom, #add-lab, #add-teacher, #add-recess {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.bulk-tools {
+    margin: 0 0 14px;
+    padding: 12px;
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    background: var(--bg-primary);
+}
+
+.bulk-tools label {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.bulk-tools textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 88px;
+    padding: 10px;
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.bulk-tools-actions {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.bulk-tools-actions button {
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: 7px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.bulk-tools-actions button:hover {
+    filter: brightness(1.08);
+}
+
+.bulk-status {
+    font-size: 12px;
+    color: var(--text-secondary);
+}

@@ -1,0 +1,239 @@
+/*
+ * Global button consistency layer.
+ * This file is intentionally loaded after page CSS to normalize legacy button classes.
+ */
+
+/* Shared button reset for legacy classes */
+.redirectbtn,
+.createNewYearBtn,
+.addRowBtn,
+.generatebtn,
+.savebtn,
+.backbtn,
+.btn-back,
+.compare-btn,
+.batch-delete-btn,
+.deleteYearBtn,
+.deleteRowBtn,
+.deleteTtbtn,
+.editBtn,
+.editRowBtn,
+.viewTtbtn,
+.pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+    line-height: 1;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease, background 0.18s ease;
+}
+
+/* Legacy size mapping */
+.deleteRowBtn,
+.editBtn,
+.editRowBtn,
+.viewTtbtn,
+.deleteTtbtn,
+.pagination-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+/* Years table row action buttons: force identical size */
+.deleteRowBtn,
+.editRowBtn {
+    width: 84px;
+    min-width: 84px;
+    height: 30px;
+    padding: 0 10px;
+}
+
+.redirectbtn,
+.createNewYearBtn,
+.addRowBtn,
+.generatebtn,
+.savebtn,
+.backbtn,
+.btn-back,
+.compare-btn,
+.batch-delete-btn,
+.deleteYearBtn {
+    padding: 9px 20px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+/* Indigo */
+.redirectbtn {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.30);
+}
+.redirectbtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+    color: #ffffff;
+}
+
+/* Green */
+.createNewYearBtn,
+.addRowBtn,
+.generatebtn,
+.savebtn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.28);
+}
+.createNewYearBtn:hover,
+.addRowBtn:hover,
+.generatebtn:hover,
+.savebtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.42);
+    color: #ffffff;
+}
+
+/* Red */
+.deleteYearBtn,
+.deleteRowBtn,
+.deleteTtbtn,
+.backbtn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.28);
+}
+.deleteYearBtn:hover,
+.deleteRowBtn:hover,
+.deleteTtbtn:hover,
+.backbtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.42);
+    color: #ffffff;
+}
+
+/* Blue */
+.editBtn,
+.editRowBtn,
+.viewTtbtn,
+.compare-btn.active,
+.compare-btn:not(:disabled) {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.28);
+}
+.editBtn:hover,
+.editRowBtn:hover,
+.viewTtbtn:hover,
+.compare-btn.active:hover,
+.compare-btn:not(:disabled):hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.42);
+    color: #ffffff;
+}
+
+/* Ghost */
+.btn-back,
+.pagination-btn,
+.compare-btn,
+.batch-delete-btn {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
+    box-shadow: none;
+}
+
+.btn-back:hover,
+.pagination-btn:hover:not(.disabled):not(:disabled),
+.compare-btn:hover:disabled,
+.batch-delete-btn:hover:disabled {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.45);
+    color: #a78bfa;
+    transform: translateY(-1px);
+}
+
+/* Enable red style when batch delete becomes actionable */
+.batch-delete-btn:not(:disabled) {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.28);
+}
+.batch-delete-btn:not(:disabled):hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.42);
+    color: #ffffff;
+}
+
+/* Disabled state normalization */
+.compare-btn:disabled,
+.batch-delete-btn:disabled,
+.pagination-btn.disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    filter: none;
+    transform: none;
+    box-shadow: none;
+}
+
+.pagination-btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+}
+
+/* Small button hover should use a smaller lift */
+.deleteRowBtn:hover,
+.editBtn:hover,
+.editRowBtn:hover,
+.viewTtbtn:hover,
+.deleteTtbtn:hover,
+.pagination-btn:hover:not(.disabled):not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.deleteRowBtn:active,
+.editBtn:active,
+.editRowBtn:active,
+.viewTtbtn:active,
+.deleteTtbtn:active,
+.redirectbtn:active,
+.createNewYearBtn:active,
+.addRowBtn:active,
+.generatebtn:active,
+.savebtn:active,
+.backbtn:active,
+.btn-back:active,
+.compare-btn:active,
+.batch-delete-btn:active {
+    transform: translateY(0);
+}
+
+/* Keep action controls aligned in one row in years/practicals tables */
+.action-cell-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+}
+
+.action-cell-buttons form {
+    margin: 0 !important;
+    display: inline-flex !important;
+}

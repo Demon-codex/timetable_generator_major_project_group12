@@ -1,0 +1,475 @@
+.mainContainer {
+    padding: 20px 40px;
+    background-color: rgb(38, 38, 38);
+    max-width: 1400px;
+    margin: 20px auto;
+    border-radius: 8px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgb(80, 80, 80);
+}
+
+.header h2 {
+    color: rgb(200, 198, 198);
+    font-size: 28px;
+    margin: 0;
+}
+
+.backbtn {
+    padding: 10px 20px;
+    background-color: rgb(60, 60, 60);
+    color: rgb(200, 200, 200);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    border: 1px solid rgb(100, 100, 100);
+}
+
+.backbtn:hover {
+    background-color: rgb(80, 80, 80);
+    border-color: rgb(120, 120, 120);
+}
+
+/* Comparison Grid */
+.comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.comparison-card {
+    background-color: rgb(45, 45, 45);
+    border: 2px solid rgb(80, 80, 80);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.comparison-card:hover {
+    border-color: rgb(100, 100, 100);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.comparison-card.best-timetable {
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.best-badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: rgb(30, 30, 30);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 13px;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+.card-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgb(80, 80, 80);
+}
+
+.card-header h3 {
+    color: #4a9eff;
+    font-size: 22px;
+    margin: 0 0 5px 0;
+}
+
+.created-date {
+    color: rgb(150, 150, 150);
+    font-size: 13px;
+    margin: 0;
+}
+
+/* Card Sections */
+.card-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgb(55, 55, 55);
+    border-radius: 6px;
+}
+
+.card-section h4 {
+    color: rgb(200, 200, 200);
+    font-size: 16px;
+    margin: 0 0 12px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgb(80, 80, 80);
+}
+
+/* Metrics */
+.metric-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.metric {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metric-label {
+    color: rgb(170, 170, 170);
+    font-size: 13px;
+}
+
+.metric-value {
+    color: rgb(220, 220, 220);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.metric-value.fitness-score {
+    color: #4a9eff;
+}
+
+/* Hours Breakdown */
+.hours-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hours-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.hours-item.total {
+    background-color: rgba(74, 158, 255, 0.15);
+    border: 1px solid rgba(74, 158, 255, 0.3);
+    font-weight: bold;
+}
+
+.hours-label {
+    color: rgb(180, 180, 180);
+    font-size: 14px;
+}
+
+.hours-value {
+    color: rgb(220, 220, 220);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Workload Summary */
+.workload-summary {
+    display: flex;
+    gap: 12px;
+    justify-content: space-around;
+}
+
+.workload-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px;
+    border-radius: 6px;
+    flex: 1;
+}
+
+.workload-item.balanced {
+    background-color: rgba(52, 199, 89, 0.1);
+    border: 1px solid rgba(52, 199, 89, 0.3);
+}
+
+.workload-item.overloaded {
+    background-color: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.3);
+}
+
+.workload-item.underutilized {
+    background-color: rgba(255, 159, 10, 0.1);
+    border: 1px solid rgba(255, 159, 10, 0.3);
+}
+
+.workload-icon {
+    font-size: 24px;
+}
+
+.workload-count {
+    font-size: 28px;
+    font-weight: bold;
+    color: rgb(220, 220, 220);
+}
+
+.workload-label {
+    font-size: 12px;
+    color: rgb(170, 170, 170);
+}
+
+/* Quality Indicators */
+.quality-indicators {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border-left: 3px solid;
+}
+
+.indicator.good {
+    background-color: rgba(52, 199, 89, 0.1);
+    border-left-color: #34c759;
+}
+
+.indicator.warning {
+    background-color: rgba(255, 59, 48, 0.1);
+    border-left-color: #ff3b30;
+}
+
+.indicator.info {
+    background-color: rgba(255, 159, 10, 0.1);
+    border-left-color: #ff9f0a;
+}
+
+.indicator-icon {
+    font-size: 18px;
+}
+
+.indicator-text {
+    color: rgb(200, 200, 200);
+    font-size: 14px;
+}
+
+/* Card Actions */
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.view-btn,
+.export-btn {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.view-btn {
+    background-color: #4a9eff;
+    color: white;
+    border: 1px solid #4a9eff;
+}
+
+.view-btn:hover {
+    background-color: #3a8eef;
+}
+
+.export-btn {
+    background-color: transparent;
+    color: #4a9eff;
+    border: 1px solid #4a9eff;
+}
+
+.export-btn:hover {
+    background-color: rgba(74, 158, 255, 0.1);
+}
+
+/* Comparison Summary */
+.comparison-summary {
+    background-color: rgb(45, 45, 45);
+    border: 2px solid rgb(80, 80, 80);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.comparison-summary h3 {
+    color: rgb(200, 200, 200);
+    font-size: 20px;
+    margin: 0 0 15px 0;
+}
+
+.summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.summary-item {
+    color: rgb(180, 180, 180);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.summary-item strong {
+    color: rgb(220, 220, 220);
+}
+
+.summary-item .highlight {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+/* Print Controls */
+.print-controls {
+    text-align: center;
+}
+
+.print-btn {
+    padding: 12px 30px;
+    background-color: rgb(60, 60, 60);
+    color: rgb(200, 200, 200);
+    border: 1px solid rgb(100, 100, 100);
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.print-btn:hover {
+    background-color: rgb(80, 80, 80);
+    border-color: rgb(120, 120, 120);
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+@media screen and (max-width: 1024px) {
+    .comparison-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .mainContainer {
+        padding: 15px 20px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .header h2 {
+        font-size: 22px;
+    }
+
+    .comparison-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .metric-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .workload-summary {
+        flex-direction: column;
+    }
+
+    .card-actions {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .mainContainer {
+        padding: 10px 15px;
+    }
+
+    .header h2 {
+        font-size: 20px;
+    }
+
+    .card-header h3 {
+        font-size: 18px;
+    }
+
+    .metric-value {
+        font-size: 18px;
+    }
+
+    .workload-count {
+        font-size: 24px;
+    }
+}
+
+/* ==================== PRINT STYLES ==================== */
+
+@media print {
+    body {
+        background-color: white;
+    }
+
+    .mainContainer {
+        background-color: white;
+        padding: 0;
+        margin: 0;
+    }
+
+    .header,
+    .card-header h3,
+    .card-section h4,
+    .comparison-summary h3 {
+        color: black;
+    }
+
+    .comparison-card,
+    .card-section,
+    .comparison-summary {
+        background-color: white;
+        border-color: #ccc;
+    }
+
+    .metric-value,
+    .hours-value,
+    .workload-count,
+    .indicator-text,
+    .summary-item {
+        color: black;
+    }
+
+    .print-controls,
+    .card-actions,
+    .backbtn {
+        display: none;
+    }
+
+    .comparison-grid {
+        display: block;
+    }
+
+    .comparison-card {
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+    }
+
+    .best-badge {
+        background: #ffd700;
+        color: black;
+    }
+}

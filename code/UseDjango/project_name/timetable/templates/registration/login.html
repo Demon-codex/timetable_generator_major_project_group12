@@ -1,0 +1,103 @@
+{% extends 'timetable/template.html' %}
+{% load static %}
+
+{% block title %}Login - Smart Timetable{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'timetable/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'timetable/css/setupForm.css' %}">
+<style>
+    .login-card {
+        background: var(--bg-card, rgb(30, 35, 45));
+        border: 1px solid var(--border-secondary, rgba(99,102,241,0.2));
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+    body.light-theme .login-card {
+        background: #ffffff;
+        border-color: rgba(99,102,241,0.18);
+        box-shadow: 0 8px 32px rgba(99,102,241,0.08);
+    }
+    .login-label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+    .login-submit {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 28px;
+        font-size: 15px;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 420px; margin: 5rem auto; padding: 0 1rem;">
+    <div class="login-card">
+
+        <h1 style="text-align:center; font-size: 1.6rem; margin-bottom: 0.3rem; color: var(--text-primary);">
+            Sign In
+        </h1>
+        <p style="text-align:center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.9rem;">
+            Smart Timetable Scheduling System
+        </p>
+
+        {% if form.errors %}
+        <div style="
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.4);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        ">
+            ⚠ Invalid username or password. Please try again.
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <div style="margin-bottom: 1.25rem;">
+                <label class="login-label">Username</label>
+                <input
+                    type="text"
+                    name="username"
+                    autofocus
+                    required
+                    class="input"
+                    placeholder="Enter your username"
+                >
+            </div>
+
+            <div style="margin-bottom: 1.75rem;">
+                <label class="login-label">Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    required
+                    class="input"
+                    placeholder="Enter your password"
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary login-submit">
+                Sign In
+            </button>
+        </form>
+
+        <p style="text-align:center; margin-top:1.25rem; font-size:0.8rem; color:var(--text-secondary);">
+            Admin?
+            <a href="{% url 'admin:index' %}" style="color:#a78bfa; text-decoration:none;">Go to admin panel</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

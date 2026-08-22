@@ -1,0 +1,80 @@
+/**
+ * Batch Operations Styling - Dark Theme Matching UI
+ */
+
+.batch-controls {
+    display: none;
+    margin: 15px 0;
+    padding: 10px 15px;
+    background: rgba(60, 60, 60, 0.4);
+    border: 1px solid rgba(80, 80, 80, 0.4);
+    border-radius: 6px;
+    gap: 12px;
+}
+
+.batch-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.batch-delete-btn,
+.batch-clear-btn {
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.3px;
+}
+
+.batch-delete-btn {
+    background-color: rgb(220, 53, 69);
+    color: white;
+}
+
+.batch-delete-btn:hover {
+    background-color: rgb(200, 35, 51);
+    transform: scale(1.02);
+}
+
+.batch-clear-btn {
+    background-color: rgb(108, 117, 125);
+    color: white;
+}
+
+.batch-clear-btn:hover {
+    background-color: rgb(90, 98, 104);
+    transform: scale(1.02);
+}
+
+/* Checkbox column styling */
+.checkbox-col {
+    width: 45px;
+    text-align: center;
+    padding: 10px !important;
+}
+
+/* Selected row highlight - subtle dark theme */
+tr.selected {
+    background-color: rgba(90, 150, 200, 0.15) !important;
+}
+
+.batch-checkbox {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: #6366f1;
+    border-radius: 3px;
+}
+
+/* Count badge styling */
+.batch-delete-btn .count {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-left: 3px;
+}

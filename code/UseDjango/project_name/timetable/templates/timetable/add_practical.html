@@ -1,0 +1,106 @@
+{% extends 'timetable/template.html' %}
+{% load static %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'timetable/css/add_practical.css'%}?v=2"> {% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:home' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="breadcrumb-icon">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                <span class="breadcrumb-text">Home</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:setup' %}">
+                <span class="breadcrumb-text">Setup</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:years' department.id %}">
+                <span class="breadcrumb-text">{{ department.department_name }}</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-text">{% if editing %}Edit Practical{% else %}Add Practical to {{ year.year_name }}{% endif %}</span>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container">
+    <div class="form-container">
+        <h2 class="mainLabel">{% if editing %}Edit Practical – {{ year.year_name }}{% else %}Add Practical – {{ year.year_name }}{% endif %}</h2>
+        
+        <!-- Display Non-Field Errors -->
+        {% if form.non_field_errors %}
+        <div class="error-container">
+            <div class="error-icon">⚠️</div>
+            <div class="error-messages">
+                {% for error in form.non_field_errors %}
+                    <p class="error-message">{{ error }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <form id="addPracticalForm" method="post" class="practicalForm" data-autosave="true" data-autosave-key="{% if editing %}edit_practical_{{ practical.id }}{% else %}add_practical_{{ year.id }}_fresh{% endif %}" data-autosave-restore="{% if editing %}true{% else %}false{% endif %}" data-undo-redo="true">
+
+                <div class="formGroup">
+                {% csrf_token %}
+                {{ form.practical_name.label_tag }}
+                {{ form.practical_name }}
+                {% if form.practical_name.errors %}
+                    <div class="field-error">
+                        {% for error in form.practical_name.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                </div>
+
+                <div class="formGroup">
+                <h4 class="subLabel">Select Teachers</h4>
+                {{ form.teachers }}
+                {% if form.teachers.errors %}
+                    <div class="field-error">
+                        {% for error in form.teachers.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                </div>
+
+                <div class="formGroup">
+                {{ form.hours_per_week.label_tag }}
+                {{ form.hours_per_week }}
+                {% if form.hours_per_week.errors %}
+                    <div class="field-error">
+                        {% for error in form.hours_per_week.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                </div>
+                <button type="submit" class="btn-md btn-indigo btn-block">{% if editing %}Update Practical{% else %}Save Practical{% endif %}</button>
+        </form>
+    </div>
+
+
+
+    <a href="{% url 'timetable:years' department.id %}" class="btn-md btn-ghost btn-block">
+        Back to Years
+    </a>
+</div>
+
+{% endblock %}

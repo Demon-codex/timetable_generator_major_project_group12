@@ -1,0 +1,335 @@
+{% extends 'timetable/template.html' %}
+{% load static %}
+
+
+{% block title %}Saved timetables{% endblock %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'timetable/css/saved_timetable_list.css'%}?v=6"> {% endblock %}
+
+{% block nav_generate %}activeNavPage{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:home' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="breadcrumb-icon">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                <span class="breadcrumb-text">Home</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:setup' %}">
+                <span class="breadcrumb-text">Setup</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:years' department.id %}">
+                <span class="breadcrumb-text">{{ department.department_name }}</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-text">Saved Timetables</span>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- <pre>{{ department }}</pre>
+<pre>{{ saved_tts }}</pre> -->
+
+<div class="mainContainer">
+  <div class="header">
+    <h2>{{ department.department_name }} – Saved Timetables</h2>
+    <a href="{% url 'timetable:setup' %}" class="btn-md btn-indigo">Back to setup</a>
+  </div>
+
+  <div class="comparison-controls">
+        <button id="compareBtn" class="btn-md btn-blue compare-btn" disabled>Compare Selected (<span id="selectedCount">0</span>)</button>
+        <button id="batchDeleteTimetablesBtn" class="btn-md btn-red batch-delete-btn" disabled style="margin-left: 10px;">
+      <span class="btn-icon">🗑️</span>
+      <span class="btn-label">Delete Selected</span>
+      <span class="batch-count">(0)</span>
+    </button>
+    <p class="comparison-hint">Select timetables for comparison or bulk deletion</p>
+  </div>
+
+  <div class="tableContainer">
+    <table>
+      <thead>
+        <tr>
+          <th class="checkbox-col">
+            <input type="checkbox" id="selectAll" title="Select All">
+          </th>
+          <th>Name</th>
+          <th>Created</th>
+          <th>Fitness</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tt in saved_tts %}
+          <tr>
+            <td class="checkbox-col">
+              <input type="checkbox" class="tt-checkbox" value="{{ tt.id }}" data-tt-name="{{ tt.name }}">
+            </td>
+            <td>{{ tt.name }}</td>
+            <td>{{ tt.created_at|date:"d M Y H:i" }}</td>
+            <td>{{ tt.fitness }}</td>
+            <td>
+              <a href="{% url 'timetable:view_saved_timetable' tt.id %}" class="btn-sm btn-blue">View</a>
+              <a href="{% url 'timetable:delete_saved_timetable' tt.id %}" class="btn-sm btn-red" data-item-name="{{ tt.name }}" data-item-type="timetable" data-delete-link>Delete</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5">No timetables saved yet. Click Generate New Timetables button to generate one.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls -->
+  {% if is_paginated %}
+  <div class="pagination-container">
+    <div class="pagination-info">
+      Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} timetables
+    </div>
+    <div class="pagination-controls">
+      {% if page_obj.has_previous %}
+                <a href="?page=1" class="btn-sm btn-ghost pagination-btn" title="First Page">&laquo;&laquo;</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn-sm btn-ghost pagination-btn" title="Previous Page">&laquo;</a>
+      {% else %}
+                <span class="btn-sm btn-ghost pagination-btn disabled">&laquo;&laquo;</span>
+                <span class="btn-sm btn-ghost pagination-btn disabled">&laquo;</span>
+      {% endif %}
+      
+      <span class="pagination-current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+      
+      {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn-sm btn-ghost pagination-btn" title="Next Page">&raquo;</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="btn-sm btn-ghost pagination-btn" title="Last Page">&raquo;&raquo;</a>
+      {% else %}
+                <span class="btn-sm btn-ghost pagination-btn disabled">&raquo;</span>
+                <span class="btn-sm btn-ghost pagination-btn disabled">&raquo;&raquo;</span>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <a href="{% url 'timetable:generate_timetable' department.pk %}" class="btn-md btn-green" id="generateBtn">Generate New Timetables</a>
+
+
+
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const generateBtn = document.getElementById('generateBtn');
+        const compareBtn = document.getElementById('compareBtn');
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const ttCheckboxes = document.querySelectorAll('.tt-checkbox');
+        const selectedCountSpan = document.getElementById('selectedCount');
+        
+        // Generate button functionality
+        if (generateBtn) {
+            generateBtn.addEventListener('click', function(e) {
+                // Show custom loading for timetable generation
+                const overlay = document.getElementById('loadingOverlay');
+                const loadingContent = overlay.querySelector('.loading-content');
+                
+                // Add generate-loading class for special styling
+                loadingContent.classList.add('generate-loading');
+                
+                // Update text
+                const loadingText = overlay.querySelector('.loading-text');
+                const loadingSubtext = overlay.querySelector('.loading-subtext');
+                
+                loadingText.innerHTML = 'Generating Timetable<span class="loading-dots"></span>';
+                loadingSubtext.textContent = 'This may take a few minutes. Please be patient...';
+                
+                // Add pulse animation
+                const pulseDiv = document.createElement('div');
+                pulseDiv.className = 'loading-pulse';
+                pulseDiv.innerHTML = '<div class="pulse-dot"></div><div class="pulse-dot"></div><div class="pulse-dot"></div>';
+                loadingContent.appendChild(pulseDiv);
+                
+                // Show overlay
+                overlay.classList.add('active');
+            });
+        }
+
+        // Comparison functionality
+        const batchDeleteBtn = document.getElementById('batchDeleteTimetablesBtn');
+        const batchCountSpan = batchDeleteBtn ? batchDeleteBtn.querySelector('.batch-count') : null;
+        
+        function updateCompareButton() {
+            const selectedCheckboxes = Array.from(ttCheckboxes).filter(cb => cb.checked);
+            const count = selectedCheckboxes.length;
+            
+            selectedCountSpan.textContent = count;
+            
+            // Update batch delete button
+            if (batchDeleteBtn) {
+                batchDeleteBtn.disabled = count === 0;
+                if (batchCountSpan) {
+                    batchCountSpan.textContent = `(${count})`;
+                }
+            }
+            
+            // Enable compare button if 1-3 timetables selected
+            compareBtn.disabled = count === 0 || count > 3;
+            
+            // Update button styling
+            if (count > 0 && count <= 3) {
+                compareBtn.classList.add('active');
+            } else {
+                compareBtn.classList.remove('active');
+            }
+            
+            // Show warning if more than 3 selected
+            if (count > 3) {
+                compareBtn.textContent = `Too many selected (${count}/3 max)`;
+            } else {
+                compareBtn.innerHTML = `Compare Selected (<span id="selectedCount">${count}</span>)`;
+            }
+        }
+
+        // Select all functionality
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+                ttCheckboxes.forEach(cb => {
+                    cb.checked = this.checked;
+                });
+                updateCompareButton();
+            });
+        }
+
+        // Individual checkbox functionality
+        ttCheckboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                // Update select all checkbox
+                const allChecked = Array.from(ttCheckboxes).every(checkbox => checkbox.checked);
+                const someChecked = Array.from(ttCheckboxes).some(checkbox => checkbox.checked);
+                
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.checked = allChecked;
+                    selectAllCheckbox.indeterminate = someChecked && !allChecked;
+                }
+                
+                updateCompareButton();
+            });
+        });
+
+        // Compare button functionality
+        if (compareBtn) {
+            compareBtn.addEventListener('click', function() {
+                const selectedIds = Array.from(ttCheckboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value);
+                
+                if (selectedIds.length === 0) {
+                    if (typeof showToast === 'function') {
+                        showToast('Please select at least one timetable to compare', 'warning');
+                    } else {
+                        alert('Please select at least one timetable to compare');
+                    }
+                    return;
+                }
+                
+                if (selectedIds.length > 3) {
+                    if (typeof showToast === 'function') {
+                        showToast('You can compare up to 3 timetables at once', 'warning');
+                    } else {
+                        alert('You can compare up to 3 timetables at once');
+                    }
+                    return;
+                }
+                
+                // Build comparison URL
+                const departmentId = {{ department.id }};
+                const params = selectedIds.map(id => `tt_ids=${id}`).join('&');
+                const url = `/timetable/department/${departmentId}/compare/?${params}`;
+                
+                window.location.href = url;
+            });
+        }
+
+        // Batch delete functionality
+        if (batchDeleteBtn) {
+            batchDeleteBtn.addEventListener('click', async function() {
+                const selectedIds = Array.from(ttCheckboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value);
+                
+                if (selectedIds.length === 0) {
+                    if (typeof showToast === 'function') {
+                        showToast('Please select at least one timetable to delete', 'warning');
+                    }
+                    return;
+                }
+                
+                const count = selectedIds.length;
+                const confirmed = confirm(`Are you sure you want to delete ${count} selected timetable${count > 1 ? 's' : ''}? This action cannot be undone.`);
+                
+                if (!confirmed) return;
+                
+                // Show loading
+                if (typeof showLoading === 'function') {
+                    showLoading('Deleting...', `Deleting ${count} timetable${count > 1 ? 's' : ''}`);
+                }
+                
+                try {
+                    const response = await fetch("{% url 'timetable:batch_delete_timetables' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({ ids: selectedIds })
+                    });
+                    
+                    if (typeof hideLoading === 'function') {
+                        hideLoading();
+                    }
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        if (typeof showToast === 'function') {
+                            showToast(result.message, 'success');
+                        }
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        if (typeof showToast === 'function') {
+                            showToast('Error: ' + result.message, 'error');
+                        }
+                    }
+                } catch (error) {
+                    if (typeof hideLoading === 'function') {
+                        hideLoading();
+                    }
+                    if (typeof showToast === 'function') {
+                        showToast('Error deleting timetables: ' + error.message, 'error');
+                    }
+                    console.error('Batch delete error:', error);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

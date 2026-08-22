@@ -1,0 +1,227 @@
+/**
+ * Undo/Redo Controls Styling
+ */
+
+.undo-redo-controls {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: var(--bg-secondary, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-secondary, rgba(255, 255, 255, 0.1));
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.undo-redo-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.undo-btn,
+.redo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.2));
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--bg-primary, rgba(255, 255, 255, 0.05));
+    color: var(--text-primary, rgb(220, 220, 220));
+}
+
+.undo-btn {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(41, 128, 185, 0.1));
+    border-color: rgba(52, 152, 219, 0.5);
+}
+
+.redo-btn {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(39, 174, 96, 0.1));
+    border-color: rgba(46, 204, 113, 0.5);
+}
+
+.undo-btn:hover:not(:disabled),
+.redo-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.undo-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(41, 128, 185, 0.2));
+    border-color: rgba(52, 152, 219, 0.8);
+}
+
+.redo-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(39, 174, 96, 0.2));
+    border-color: rgba(46, 204, 113, 0.8);
+}
+
+.undo-btn:active:not(:disabled),
+.redo-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.undo-btn:disabled,
+.redo-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: var(--bg-secondary, rgba(255, 255, 255, 0.03));
+    border-color: var(--border-secondary, rgba(255, 255, 255, 0.1));
+}
+
+.btn-icon {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.btn-label {
+    font-size: 13px;
+    letter-spacing: 0.3px;
+}
+
+.history-info {
+    margin-left: auto;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--text-secondary, rgba(220, 220, 220, 0.7));
+    background: var(--bg-primary, rgba(0, 0, 0, 0.2));
+    border: 1px solid var(--border-secondary, rgba(255, 255, 255, 0.1));
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+}
+
+#historyPosition {
+    font-weight: 600;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .undo-redo-controls {
+        padding: 12px;
+    }
+
+    .undo-redo-buttons {
+        gap: 8px;
+    }
+
+    .undo-btn,
+    .redo-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .btn-icon {
+        font-size: 16px;
+    }
+
+    .btn-label {
+        font-size: 12px;
+    }
+
+    .history-info {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 8px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-label {
+        display: none;
+    }
+
+    .undo-btn,
+    .redo-btn {
+        min-width: 40px;
+        justify-content: center;
+        padding: 8px;
+    }
+}
+
+/* Light theme adjustments */
+.light-theme .undo-redo-controls {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .undo-btn,
+.light-theme .redo-btn {
+    color: rgb(30, 30, 30);
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+.light-theme .undo-btn {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(41, 128, 185, 0.15));
+    border-color: rgba(52, 152, 219, 0.6);
+}
+
+.light-theme .redo-btn {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(39, 174, 96, 0.15));
+    border-color: rgba(46, 204, 113, 0.6);
+}
+
+.light-theme .undo-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.25), rgba(41, 128, 185, 0.25));
+}
+
+.light-theme .redo-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.25), rgba(39, 174, 96, 0.25));
+}
+
+.light-theme .undo-btn:disabled,
+.light-theme .redo-btn:disabled {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.light-theme .history-info {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgba(30, 30, 30, 0.7);
+}
+
+/* Animation for button state changes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.undo-redo-controls {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Tooltip for disabled buttons */
+.undo-btn:disabled .btn-label::after,
+.redo-btn:disabled .btn-label::after {
+    content: ' (No history)';
+    font-size: 11px;
+    opacity: 0.6;
+}
+
+@media (max-width: 480px) {
+    .undo-btn:disabled .btn-label::after,
+    .redo-btn:disabled .btn-label::after {
+        display: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    .undo-redo-controls {
+        display: none;
+    }
+}

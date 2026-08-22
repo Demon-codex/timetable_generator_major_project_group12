@@ -1,0 +1,709 @@
+
+{% extends 'timetable/template.html' %}
+{% comment %} extends must be the first line and load static to use the static folder where extra css is stored{% endcomment %}
+{% load static %}
+
+{% block title %}Setup{% endblock %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'timetable/css/setupForm.css'%}?v=7"> {% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:home' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="breadcrumb-icon">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                <span class="breadcrumb-text">Home</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:setup' %}">
+                <span class="breadcrumb-text">Setup</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-text">{% if editing %}Edit Department{% else %}Create Department{% endif %}</span>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="mainContainer">
+
+    <!-- Display Non-Field Errors -->
+    {% if form.non_field_errors %}
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <div class="error-messages">
+            {% for error in form.non_field_errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <form id="departmentSetupForm" method="post" data-autosave="true" data-autosave-key="{% if editing %}department_setup_edit_v2_{{ setup_instance.id }}{% else %}department_setup_create_v2{% endif %}" data-undo-redo="true" data-undo-containers="recess-formset,teacher-formset,classroom-formset,lab-formset">
+        <div class="basicInfo">
+        {% csrf_token %}
+        <h3>🏫 Department Setup</h3>
+        
+        {% for field in form %}
+            <div class="form-field">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="field-error">
+                        {% for error in field.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+
+
+        <!-- ai -->
+        <div class="recessInfo">
+        <h3>☕ Recess</h3>
+        
+        {% if formset4.non_form_errors %}
+        <div class="error-container">
+            <div class="error-icon">⚠️</div>
+            <div class="error-messages">
+                {% for error in formset4.non_form_errors %}
+                    <p class="error-message">{{ error }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+            <div id="recess-formset">
+                {{ formset4.management_form }}
+
+                {% for form in formset4 %}
+                    <div class="recess-form">
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                        <!-- label added -->
+                        <!-- {{ form.teacher_name.label_tag }} -->
+                        {{ form.recess_start_time.label_tag }}
+                        {{ form.recess_start_time }}
+                        {% if form.recess_start_time.errors %}
+                            <div class="field-error">
+                                {% for error in form.recess_start_time.errors %}
+                                    <span class="error-text">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        {{ form.recess_end_time.label_tag }}
+                        {{ form.recess_end_time }}
+                        {% if form.recess_end_time.errors %}
+                            <div class="field-error">
+                                {% for error in form.recess_end_time.errors %}
+                                    <span class="error-text">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        {% if form.non_field_errors %}
+                            <div class="field-error">
+                                {% for error in form.non_field_errors %}
+                                    <span class="error-text">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.instance.pk %}
+                            <label class="delete-check">{{ form.DELETE }} Delete</label>
+                        {% else %}
+                            <button type="button" class="btn-sm btn-red remove-recess">Delete</button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- HIDDEN TEMPLATE -->
+            <div id="empty-recess-form" style="display:none;">
+                <div class="recess-form">
+                    <!--label added to new forms -->
+                    <!-- {{ formset4.empty_form.teacher_name.label_tag }} -->
+                    {{ formset4.empty_form.recess_start_time.label_tag }}
+
+                    {{ formset4.empty_form.recess_start_time }}
+                    {{ formset4.empty_form.recess_end_time.label_tag }}
+                    {{ formset4.empty_form.recess_end_time }}
+                    <button type="button" class="btn-sm btn-red remove-recess">Delete</button>
+                </div>
+            </div>
+
+            <button type="button" id="add-recess" class="btn-md btn-green">New Recess</button>
+        </div>
+
+
+        <div class="teacherInfo">
+            <h3>👩‍🏫 Teachers</h3>
+
+            <div class="bulk-tools">
+                <label for="bulkTeacherInput">Add multiple teachers (one per line)</label>
+                <textarea id="bulkTeacherInput" rows="5" placeholder="Ms Dipali Tupe&#10;Mr Abhaysinh Bhosale&#10;Dr Rahul Patil"></textarea>
+                <div class="bulk-tools-actions">
+                    <button type="button" id="bulkAddTeachers">Add All Teachers</button>
+                    <span id="bulkTeacherStatus" class="bulk-status"></span>
+                </div>
+            </div>
+            
+            {% if formset1.non_form_errors %}
+            <div class="error-container">
+                <div class="error-icon">⚠️</div>
+                <div class="error-messages">
+                    {% for error in formset1.non_form_errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <div id="teacher-formset">
+                {{ formset1.management_form }}
+
+                {% for form in formset1 %}
+                    <div class="teacher-form">
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                        <!-- label added -->
+                        {{ form.teacher_name.label_tag }}
+                        {{ form.teacher_name }}
+                        {% if form.teacher_name.errors %}
+                            <div class="field-error">
+                                {% for error in form.teacher_name.errors %}
+                                    <span class="error-text">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.instance.pk %}
+                            <label class="delete-check">{{ form.DELETE }} Delete</label>
+                        {% else %}
+                            <button type="button" class="btn-sm btn-red remove-teacher">Delete</button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- HIDDEN TEMPLATE -->
+            <div id="empty-teacher-form" style="display:none;">
+                <div class="teacher-form">
+                    <!--label added to new forms -->
+                    {{ formset1.empty_form.teacher_name.label_tag }}
+                    {{ formset1.empty_form.teacher_name }}
+                    <button type="button" class="btn-sm btn-red remove-teacher">Delete</button>
+                </div>
+            </div>
+
+            <button type="button" id="add-teacher" class="btn-md btn-green">New Teacher</button>
+        </div>
+
+
+        <!-- <h3>Classrooms</h3>
+        {{ formset2.management_form }}
+        {% for form in formset2 %}
+            {{ form.as_p }}
+        {% endfor %} -->
+        <div class="classroomInfo">
+            <h3>🏛️ Classrooms</h3>
+
+            <div class="bulk-tools">
+                <label for="bulkClassroomInput">Add multiple classrooms (one per line: RoomId,Capacity)</label>
+                <textarea id="bulkClassroomInput" rows="5" placeholder="CR201,120&#10;CR202,80"></textarea>
+                <div class="bulk-tools-actions">
+                    <button type="button" id="bulkAddClassrooms">Add All Classrooms</button>
+                    <span id="bulkClassroomStatus" class="bulk-status"></span>
+                </div>
+            </div>
+            
+            {% if formset2.non_form_errors %}
+            <div class="error-container">
+                <div class="error-icon">⚠️</div>
+                <div class="error-messages">
+                    {% for error in formset2.non_form_errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div id="classroom-formset">
+                {{ formset2.management_form }}
+
+                {% for form in formset2 %}
+                    <div class="classroom-form">
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    {{ form.classroom_id.label_tag }}
+                    {{ form.classroom_id }}
+                    {% if form.classroom_id.errors %}
+                        <div class="field-error">
+                            {% for error in form.classroom_id.errors %}
+                                <span class="error-text">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {{ form.classroom_capacity.label_tag }}
+                    {{ form.classroom_capacity }}
+                    {% if form.classroom_capacity.errors %}
+                        <div class="field-error">
+                            {% for error in form.classroom_capacity.errors %}
+                                <span class="error-text">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                        {% if form.instance.pk %}
+                            <label class="delete-check">{{ form.DELETE }} Delete</label>
+                        {% else %}
+                            <button type="button" class="btn-sm btn-red remove-classroom">Delete</button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div id="empty-classroom-form" style="display:none;">
+                <div class="classroom-form">
+                    {{ formset2.empty_form.classroom_id.label_tag }}
+                    {{ formset2.empty_form.classroom_id }}
+                    {{ formset2.empty_form.classroom_capacity.label_tag }}
+                    {{ formset2.empty_form.classroom_capacity }}
+                    <button type="button" class="btn-sm btn-red remove-classroom">Delete</button>
+                </div>
+            </div>
+
+            <button type="button" id="add-classroom" class="btn-md btn-green">New Classroom</button>
+        </div>
+
+<!-- 
+        <h3>Lab Rooms</h3>
+        {{ formset3.management_form }}
+        {% for form in formset3 %}
+            {{ form.as_p }}
+        {% endfor %} -->
+        <div class="labroomInfo">
+            <h3>🧪 Lab Rooms</h3>
+
+            <div class="bulk-tools">
+                <label for="bulkLabInput">Add multiple labs (one per line: LabId,Capacity)</label>
+                <textarea id="bulkLabInput" rows="5" placeholder="LAB7,40&#10;LAB8,30"></textarea>
+                <div class="bulk-tools-actions">
+                    <button type="button" id="bulkAddLabs">Add All Labs</button>
+                    <span id="bulkLabStatus" class="bulk-status"></span>
+                </div>
+            </div>
+            
+            {% if formset3.non_form_errors %}
+            <div class="error-container">
+                <div class="error-icon">⚠️</div>
+                <div class="error-messages">
+                    {% for error in formset3.non_form_errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div id="lab-formset">
+                {{ formset3.management_form }}
+
+                {% for form in formset3 %}
+                    <div class="lab-form">
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                        {{ form.labroom_id.label_tag }}
+                        {{ form.labroom_id }}
+                        {% if form.labroom_id.errors %}
+                            <div class="field-error">
+                                {% for error in form.labroom_id.errors %}
+                                    <span class="error-text">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {{ form.labroom_capacity.label_tag }}
+                        {{ form.labroom_capacity }}
+                        {% if form.labroom_capacity.errors %}
+                            <div class="field-error">
+                                {% for error in form.labroom_capacity.errors %}
+                                    <span class="error-text">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if form.instance.pk %}
+                            <label class="delete-check">{{ form.DELETE }} Delete</label>
+                        {% else %}
+                            <button type="button" class="btn-sm btn-red remove-lab">Delete</button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div id="empty-lab-form" style="display:none;">
+                <div class="lab-form">
+
+                    {{ formset3.empty_form.labroom_id.label_tag }}               
+                    {{ formset3.empty_form.labroom_id }}
+
+                    {{ formset3.empty_form.labroom_capacity.label_tag }}
+                    {{ formset3.empty_form.labroom_capacity }}
+                    <button type="button" class="btn-sm btn-red remove-lab">Delete</button>
+                </div>
+            </div>
+
+            <button type="button" id="add-lab" class="btn-md btn-green">New lab</button>
+        </div>
+
+
+
+
+        <button type="submit" class="btn-lg btn-indigo btn-block">{% if editing %}Update Department{% else %}Save{% endif %}</button>
+    </form>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const addButton = document.getElementById('add-teacher');
+    const formsetDiv = document.getElementById('teacher-formset');
+    const totalForms = document.getElementById('id_relatedNameTeachers-TOTAL_FORMS');
+    const emptyFormTemplate = document.getElementById('empty-teacher-form').innerHTML;
+
+    addButton.addEventListener('click', function () {
+        const formIndex = parseInt(totalForms.value);
+
+        let newFormHtml = emptyFormTemplate.replace(
+            /__prefix__/g,
+            formIndex
+        );
+
+        formsetDiv.insertAdjacentHTML('beforeend', newFormHtml);
+        totalForms.value = formIndex + 1;
+    });
+
+    formsetDiv.addEventListener('click', function (e) {
+        if (e.target.classList.contains('remove-teacher')) {
+            e.target.closest('.teacher-form').remove();
+            totalForms.value = parseInt(totalForms.value) - 1;
+        }
+    });
+});
+</script> -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    function setupFormset(config) {
+        const addButton = document.getElementById(config.addButtonId);
+        const formsetDiv = document.getElementById(config.formsetId);
+        const totalForms = document.getElementById(config.totalFormsId);
+        const emptyFormContainer = document.getElementById(config.emptyFormId);
+
+        if (!addButton || !formsetDiv || !totalForms || !emptyFormContainer) {
+            return;
+        }
+
+        const emptyFormTemplate = emptyFormContainer.innerHTML;
+
+        addButton.addEventListener('click', function () {
+            const formIndex = parseInt(totalForms.value);
+
+            let newFormHtml = emptyFormTemplate.replace(
+                /__prefix__/g,
+                formIndex
+            );
+
+            formsetDiv.insertAdjacentHTML('beforeend', newFormHtml);
+            totalForms.value = formIndex + 1;
+        });
+
+        formsetDiv.addEventListener('click', function (e) {
+            const removeButton = e.target.closest(`.${config.removeClass}`);
+            if (!removeButton || !formsetDiv.contains(removeButton)) {
+                return;
+            }
+
+            const row = removeButton.closest(config.formClass);
+            if (!row) {
+                return;
+            }
+
+            row.remove();
+            const currentTotal = parseInt(totalForms.value, 10) || 0;
+            totalForms.value = Math.max(0, currentTotal - 1);
+        });
+
+        // Existing rows use hidden DELETE checkboxes; hide row immediately when checked.
+        formsetDiv.addEventListener('change', function (e) {
+            if (!e.target.matches('.delete-check input[type="checkbox"]')) {
+                return;
+            }
+
+            const row = e.target.closest(config.formClass);
+            if (!row) {
+                return;
+            }
+
+            if (e.target.checked) {
+                row.classList.add('marked-for-delete');
+                row.style.display = 'none';
+            } else {
+                row.classList.remove('marked-for-delete');
+                row.style.display = '';
+            }
+        });
+
+        formsetDiv.querySelectorAll('.delete-check input[type="checkbox"]:checked').forEach((checkbox) => {
+            const row = checkbox.closest(config.formClass);
+            if (row) {
+                row.classList.add('marked-for-delete');
+                row.style.display = 'none';
+            }
+        });
+    }
+    // Recess
+    setupFormset({
+        addButtonId: 'add-recess',
+        formsetId: 'recess-formset',
+        emptyFormId: 'empty-recess-form',
+        totalFormsId: 'id_relatedNameRecesses-TOTAL_FORMS',
+        removeClass: 'remove-recess',
+        formClass: '.recess-form'
+    })
+    // Teachers
+    setupFormset({
+        addButtonId: 'add-teacher',
+        formsetId: 'teacher-formset',
+        emptyFormId: 'empty-teacher-form',
+        totalFormsId: 'id_relatedNameTeachers-TOTAL_FORMS',
+        removeClass: 'remove-teacher',
+        formClass: '.teacher-form'
+    });
+
+    // Classrooms
+    setupFormset({
+        addButtonId: 'add-classroom',
+        formsetId: 'classroom-formset',
+        emptyFormId: 'empty-classroom-form',
+        totalFormsId: 'id_relatedNameClassRooms-TOTAL_FORMS',
+        removeClass: 'remove-classroom',
+        formClass: '.classroom-form'
+    });
+
+    // Labs
+    setupFormset({
+        addButtonId: 'add-lab',
+        formsetId: 'lab-formset',
+        emptyFormId: 'empty-lab-form',
+        totalFormsId: 'id_relatedNameLabRooms-TOTAL_FORMS',
+        removeClass: 'remove-lab',
+        formClass: '.lab-form'
+    });
+
+    function setStatus(element, message, ok = true) {
+        if (!element) return;
+        element.textContent = message;
+        element.style.color = ok ? 'var(--status-success, #4ade80)' : 'var(--status-warning, #fbbf24)';
+    }
+
+    function addDynamicFormRow(formsetId, totalFormsId, emptyFormId) {
+        const formsetDiv = document.getElementById(formsetId);
+        const totalForms = document.getElementById(totalFormsId);
+        const emptyFormTemplate = document.getElementById(emptyFormId).innerHTML;
+
+        const formIndex = parseInt(totalForms.value, 10);
+        const newFormHtml = emptyFormTemplate.replace(/__prefix__/g, formIndex);
+        formsetDiv.insertAdjacentHTML('beforeend', newFormHtml);
+        totalForms.value = formIndex + 1;
+
+        const rows = formsetDiv.querySelectorAll('.teacher-form, .classroom-form, .lab-form');
+        return rows[rows.length - 1] || null;
+    }
+
+    function setupBulkResourceAdder(config) {
+        const addButton = document.getElementById(config.buttonId);
+        const inputArea = document.getElementById(config.textareaId);
+        const statusEl = document.getElementById(config.statusId);
+
+        if (!addButton || !inputArea) return;
+
+        addButton.addEventListener('click', function () {
+            const lines = inputArea.value
+                .split(/\r?\n/)
+                .map(line => line.trim())
+                .filter(Boolean);
+
+            if (lines.length === 0) {
+                setStatus(statusEl, 'No input provided.', false);
+                return;
+            }
+
+            let added = 0;
+            let skipped = 0;
+
+            lines.forEach((line) => {
+                const parts = line.split(',').map(p => p.trim());
+                if (parts.length < config.minimumParts) {
+                    skipped += 1;
+                    return;
+                }
+
+                const values = config.extractValues(parts);
+                if (!values) {
+                    skipped += 1;
+                    return;
+                }
+
+                const row = addDynamicFormRow(config.formsetId, config.totalFormsId, config.emptyFormId);
+                if (!row) {
+                    skipped += 1;
+                    return;
+                }
+
+                const nameInput = row.querySelector(config.nameSelector);
+                const capacityInput = config.capacitySelector ? row.querySelector(config.capacitySelector) : null;
+
+                if (!nameInput) {
+                    skipped += 1;
+                    return;
+                }
+
+                const duplicateExists = Array.from(document.querySelectorAll(config.nameSelector))
+                    .some(el => el !== nameInput && (el.value || '').trim().toLowerCase() === values.name.toLowerCase());
+
+                if (duplicateExists) {
+                    row.remove();
+                    const totalForms = document.getElementById(config.totalFormsId);
+                    totalForms.value = parseInt(totalForms.value, 10) - 1;
+                    skipped += 1;
+                    return;
+                }
+
+                nameInput.value = values.name;
+                if (capacityInput && values.capacity != null) {
+                    capacityInput.value = values.capacity;
+                }
+                added += 1;
+            });
+
+            setStatus(statusEl, `Added ${added}. Skipped ${skipped}.`, skipped === 0);
+            if (added > 0) {
+                inputArea.value = '';
+            }
+        });
+    }
+
+    const bulkTeacherBtn = document.getElementById('bulkAddTeachers');
+    const bulkTeacherInput = document.getElementById('bulkTeacherInput');
+    const bulkTeacherStatus = document.getElementById('bulkTeacherStatus');
+
+    if (bulkTeacherBtn && bulkTeacherInput) {
+        bulkTeacherBtn.addEventListener('click', function () {
+            const names = bulkTeacherInput.value
+                .split(/\r?\n/)
+                .map(line => line.trim())
+                .filter(Boolean);
+
+            if (names.length === 0) {
+                setStatus(bulkTeacherStatus, 'No names provided.', false);
+                return;
+            }
+
+            let added = 0;
+            let skipped = 0;
+
+            names.forEach((name) => {
+                const row = addDynamicFormRow('teacher-formset', 'id_relatedNameTeachers-TOTAL_FORMS', 'empty-teacher-form');
+                if (!row) {
+                    skipped += 1;
+                    return;
+                }
+
+                const teacherInput = row.querySelector('input[name$="-teacher_name"]');
+                if (!teacherInput) {
+                    skipped += 1;
+                    return;
+                }
+
+                const duplicateExists = Array.from(document.querySelectorAll('input[name$="-teacher_name"]'))
+                    .some(el => el !== teacherInput && (el.value || '').trim().toLowerCase() === name.toLowerCase());
+
+                if (duplicateExists) {
+                    row.remove();
+                    const totalForms = document.getElementById('id_relatedNameTeachers-TOTAL_FORMS');
+                    totalForms.value = parseInt(totalForms.value, 10) - 1;
+                    skipped += 1;
+                    return;
+                }
+
+                teacherInput.value = name;
+                added += 1;
+            });
+
+            setStatus(bulkTeacherStatus, `Added ${added} teachers. Skipped ${skipped}.`, skipped === 0);
+            if (added > 0) {
+                bulkTeacherInput.value = '';
+            }
+        });
+    }
+
+    setupBulkResourceAdder({
+        buttonId: 'bulkAddClassrooms',
+        textareaId: 'bulkClassroomInput',
+        statusId: 'bulkClassroomStatus',
+        formsetId: 'classroom-formset',
+        totalFormsId: 'id_relatedNameClassRooms-TOTAL_FORMS',
+        emptyFormId: 'empty-classroom-form',
+        nameSelector: 'input[name$="-classroom_id"]',
+        capacitySelector: 'input[name$="-classroom_capacity"]',
+        minimumParts: 2,
+        extractValues: (parts) => {
+            const capacity = parseInt(parts[1], 10);
+            if (!parts[0] || Number.isNaN(capacity) || capacity <= 0) {
+                return null;
+            }
+            return { name: parts[0], capacity };
+        }
+    });
+
+    setupBulkResourceAdder({
+        buttonId: 'bulkAddLabs',
+        textareaId: 'bulkLabInput',
+        statusId: 'bulkLabStatus',
+        formsetId: 'lab-formset',
+        totalFormsId: 'id_relatedNameLabRooms-TOTAL_FORMS',
+        emptyFormId: 'empty-lab-form',
+        nameSelector: 'input[name$="-labroom_id"]',
+        capacitySelector: 'input[name$="-labroom_capacity"]',
+        minimumParts: 2,
+        extractValues: (parts) => {
+            const capacity = parseInt(parts[1], 10);
+            if (!parts[0] || Number.isNaN(capacity) || capacity <= 0) {
+                return null;
+            }
+            return { name: parts[0], capacity };
+        }
+    });
+
+});
+</script>
+
+{% endblock %}

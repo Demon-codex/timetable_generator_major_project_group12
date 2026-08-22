@@ -1,0 +1,310 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — SmartTimetable</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #080f1e;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* ── Animated background ── */
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse at 15% 50%, rgba(99,102,241,0.22) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 15%, rgba(168,85,247,0.18) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 90%, rgba(99,102,241,0.12) 0%, transparent 45%),
+                #080f1e;
+        }
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image: radial-gradient(rgba(99,102,241,0.08) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* ── Floating orbs ── */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.35;
+            animation: float 8s ease-in-out infinite;
+            z-index: 0;
+        }
+        .orb1 { width: 320px; height: 320px; background: #6366f1; top: 10%; left: 5%; animation-delay: 0s; }
+        .orb2 { width: 280px; height: 280px; background: #a855f7; top: 60%; right: 8%; animation-delay: 3s; }
+        .orb3 { width: 200px; height: 200px; background: #8b5cf6; bottom: 10%; left: 40%; animation-delay: 5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50%       { transform: translateY(-24px) scale(1.04); }
+        }
+
+        /* ── Card ── */
+        .card-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: rgba(13, 20, 40, 0.85);
+            border: 1px solid rgba(99,102,241,0.35);
+            border-radius: 20px;
+            padding: 40px 36px 36px;
+            box-shadow:
+                0 0 0 1px rgba(99,102,241,0.1),
+                0 24px 80px rgba(0,0,0,0.6),
+                0 0 120px rgba(99,102,241,0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* ── Logo / header ── */
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 16px rgba(99,102,241,0.45);
+            flex-shrink: 0;
+        }
+        .logo-text { display: flex; flex-direction: column; line-height: 1.15; }
+        .logo-title {
+            font-size: 17px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.3px;
+        }
+        .logo-sub {
+            font-size: 11px;
+            font-weight: 500;
+            color: #475569;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* Admin badge */
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(234,179,8,0.1);
+            border: 1px solid rgba(234,179,8,0.3);
+            color: #fbbf24;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+        .card-sub {
+            font-size: 13.5px;
+            color: #64748b;
+            margin-bottom: 28px;
+        }
+
+        /* ── Error box ── */
+        .error-box {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.35);
+            border-radius: 10px;
+            padding: 11px 14px;
+            color: #fca5a5;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ── Form ── */
+        .field { margin-bottom: 18px; }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        input[type=text],
+        input[type=password] {
+            width: 100%;
+            background: rgba(8, 15, 30, 0.9);
+            border: 1px solid rgba(99,102,241,0.28);
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 11px 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input[type=text]:focus,
+        input[type=password]:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.22);
+        }
+        input[type=text]::placeholder,
+        input[type=password]::placeholder { color: #334155; }
+
+        /* ── Submit button ── */
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            border: none;
+            border-radius: 11px;
+            padding: 13px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+            transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.01em;
+        }
+        .btn-login:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 28px rgba(99,102,241,0.5);
+        }
+        .btn-login:active { transform: translateY(0); }
+
+        /* ── Bottom link ── */
+        .bottom-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #475569;
+        }
+        .bottom-link a {
+            color: #818cf8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+        .bottom-link a:hover { color: #c4b5fd; }
+    </style>
+</head>
+<body>
+    <div class="bg"></div>
+    <div class="bg-grid"></div>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+
+    <div class="card-wrapper">
+        <div class="card">
+
+            <div class="logo-row">
+                <div class="logo-icon">🗓</div>
+                <div class="logo-text">
+                    <span class="logo-title">SmartTimetable</span>
+                    <span class="logo-sub">Scheduling System</span>
+                </div>
+            </div>
+
+            <div class="admin-badge">⚙ Admin Panel</div>
+            <h1 class="card-title">Sign in</h1>
+            <p class="card-sub">Enter your administrator credentials</p>
+
+            {% if form.errors %}
+            <div class="error-box">
+                ⚠ Invalid username or password. Please try again.
+            </div>
+            {% endif %}
+
+            {% if error_message %}
+            <div class="error-box">⚠ {{ error_message }}</div>
+            {% endif %}
+
+            <form method="post" action="{{ app_path }}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+
+                <div class="field">
+                    <label for="id_username">Username</label>
+                    <input
+                        type="text"
+                        id="id_username"
+                        name="username"
+                        autofocus
+                        autocomplete="username"
+                        required
+                        placeholder="Enter your username"
+                        value="{{ form.username.value|default:'' }}"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="id_password">Password</label>
+                    <input
+                        type="password"
+                        id="id_password"
+                        name="password"
+                        autocomplete="current-password"
+                        required
+                        placeholder="Enter your password"
+                    >
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Sign in to Admin →
+                </button>
+            </form>
+
+            <p class="bottom-link">
+                <a href="{% url 'login' %}">← Back to main app</a>
+            </p>
+
+        </div>
+    </div>
+</body>
+</html>

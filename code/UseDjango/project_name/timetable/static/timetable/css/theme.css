@@ -1,0 +1,343 @@
+/* ==================== THEME SYSTEM ==================== */
+
+/* Default Theme (Dark) - Using CSS Custom Properties */
+:root {
+    /* Background colors */
+    --bg-primary: rgb(24, 26, 31);
+    --bg-secondary: rgb(30, 41, 59);
+    --bg-tertiary: rgb(51, 65, 85);
+    --bg-header: rgb(45, 55, 72);
+    --bg-card: rgb(30, 35, 45);
+    --bg-main: rgb(24, 26, 31);
+    
+    /* Gradient backgrounds */
+    --gradient-header-start: rgba(51, 65, 85, 0.95);
+    --gradient-header-end: rgba(30, 41, 59, 0.95);
+    --gradient-container-start: rgba(30, 41, 59, 0.75);
+    --gradient-container-end: rgba(15, 23, 42, 0.9);
+    --gradient-table-header-start: rgba(51, 65, 85, 0.9);
+    --gradient-table-header-end: rgba(30, 41, 59, 0.9);
+    --gradient-controls-start: rgba(51, 65, 85, 0.7);
+    --gradient-controls-end: rgba(30, 41, 59, 0.85);
+    
+    /* Text colors */
+    --text-primary: rgb(226, 232, 240);
+    --text-secondary: rgb(203, 213, 225);
+    --text-tertiary: rgb(148, 163, 184);
+    --text-muted: rgb(148, 163, 184);
+    --text-faded: rgb(120, 120, 120);
+    
+    /* Border colors */
+    --border-primary: rgba(100, 116, 139, 0.4);
+    --border-secondary: rgba(100, 116, 139, 0.3);
+    --border-light: rgba(100, 116, 139, 0.25);
+    --border-accent: rgba(99, 102, 241, 0.3);
+    
+    /* Table colors */
+    --table-cell-bg: rgba(30, 35, 45, 0.5);
+    --table-row-hover: rgba(51, 65, 85, 0.4);
+    --table-row-selected: rgba(99, 102, 241, 0.15);
+    
+    /* Shadow colors */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.4);
+    --shadow-accent: 0 2px 8px rgba(99, 102, 241, 0.1);
+    --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    
+    /* Accent colors */
+    --accent-blue: #3b82f6;
+    --accent-blue-hover: #2563eb;
+    --accent-blue-light: rgba(59, 130, 246, 0.1);
+    
+    --accent-green: #10b981;
+    --accent-green-hover: #059669;
+    --accent-green-light: rgba(16, 185, 129, 0.1);
+    
+    --accent-red: #ef4444;
+    --accent-red-hover: #dc2626;
+    --accent-red-light: rgba(239, 68, 68, 0.1);
+    
+    --accent-orange: #f97316;
+    --accent-orange-hover: #ea580c;
+    --accent-orange-light: rgba(249, 115, 22, 0.1);
+    
+    --accent-yellow: #eab308;
+    --accent-yellow-hover: #ca8a04;
+    --accent-yellow-light: rgba(234, 179, 8, 0.1);
+    
+    --accent-indigo: #6366f1;
+    --accent-indigo-hover: #4f46e5;
+    
+    /* Chart colors */
+    --chart-grid: #686868;
+    --chart-label: #b4bab7;
+    --chart-teal: #14b8a6;
+    --chart-pink: #ec4899;
+    --chart-lime: #84cc16;
+    
+    /* Button text colors */
+    --btn-text-dark: rgb(20, 20, 20);
+    --btn-text-light: rgb(255, 255, 255);
+    
+    /* Special elements */
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --overlay-bg: rgba(0, 0, 0, 0.7);
+}
+
+/* Light Theme - Pre-load on html element to prevent flash */
+html.light-theme-loading,
+html.light-theme-loading body,
+/* Light Theme - Normal application on body element */
+body.light-theme {
+    /* Background colors */
+    --bg-primary: rgb(248, 250, 252);
+    --bg-secondary: rgb(255, 255, 255);
+    --bg-tertiary: rgb(241, 245, 249);
+    --bg-header: rgb(241, 245, 249);
+    --bg-card: rgb(255, 255, 255);
+    --bg-main: rgb(248, 250, 252);
+    
+    /* Gradient backgrounds */
+    --gradient-header-start: rgba(241, 245, 249, 0.95);
+    --gradient-header-end: rgba(226, 232, 240, 0.95);
+    --gradient-container-start: rgba(248, 250, 252, 0.75);
+    --gradient-container-end: rgba(241, 245, 249, 0.9);
+    --gradient-table-header-start: rgba(226, 232, 240, 0.9);
+    --gradient-table-header-end: rgba(203, 213, 225, 0.9);
+    --gradient-controls-start: rgba(241, 245, 249, 0.7);
+    --gradient-controls-end: rgba(226, 232, 240, 0.85);
+    
+    /* Text colors */
+    --text-primary: rgb(15, 23, 42);
+    --text-secondary: rgb(51, 65, 85);
+    --text-tertiary: rgb(100, 116, 139);
+    --text-muted: rgb(100, 116, 139);
+    --text-faded: rgb(148, 163, 184);
+    
+    /* Border colors */
+    --border-primary: rgba(203, 213, 225, 0.6);
+    --border-secondary: rgba(226, 232, 240, 0.5);
+    --border-light: rgba(226, 232, 240, 0.4);
+    --border-accent: rgba(99, 102, 241, 0.3);
+    
+    /* Table colors */
+    --table-cell-bg: rgba(248, 250, 252, 0.5);
+    --table-row-hover: rgba(226, 232, 240, 0.6);
+    --table-row-selected: rgba(99, 102, 241, 0.1);
+    
+    /* Shadow colors */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.1);
+    --shadow-accent: 0 2px 8px rgba(99, 102, 241, 0.15);
+    --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    
+    /* Accent colors - brighter for light theme */
+    --accent-blue: #2563eb;
+    --accent-blue-hover: #1d4ed8;
+    --accent-blue-light: rgba(37, 99, 235, 0.1);
+    
+    --accent-green: #059669;
+    --accent-green-hover: #047857;
+    --accent-green-light: rgba(5, 150, 105, 0.1);
+    
+    --accent-red: #dc2626;
+    --accent-red-hover: #b91c1c;
+    --accent-red-light: rgba(220, 38, 38, 0.1);
+    
+    --accent-orange: #ea580c;
+    --accent-orange-hover: #c2410c;
+    --accent-orange-light: rgba(234, 88, 12, 0.1);
+    
+    --accent-yellow: #ca8a04;
+    --accent-yellow-hover: #a16207;
+    --accent-yellow-light: rgba(202, 138, 4, 0.1);
+    
+    --accent-indigo: #4f46e5;
+    --accent-indigo-hover: #4338ca;
+    
+    /* Chart colors */
+    --chart-grid: #d0d0d0;
+    --chart-label: #666666;
+    --chart-teal: #0d9488;
+    --chart-pink: #db2777;
+    --chart-lime: #65a30d;
+    
+    /* Button text colors */
+    --btn-text-dark: rgb(20, 20, 20);
+    --btn-text-light: rgb(255, 255, 255);
+    
+    /* Special elements */
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --overlay-bg: rgba(0, 0, 0, 0.4);
+}
+
+/* Theme transition */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+* {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    z-index: 99999; /* Increased z-index to ensure visibility */
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-secondary);
+    border-radius: 50px;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transition: all 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Ensure button is visible even before theme loads */
+.theme-toggle {
+    background-color: rgb(60, 60, 60) !important;
+    border-color: rgb(100, 100, 100) !important;
+}
+
+body.light-theme .theme-toggle {
+    background-color: rgb(250, 250, 250) !important;
+    border-color: rgb(200, 200, 200) !important;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--shadow-color);
+    border-color: var(--accent-blue);
+}
+
+.theme-toggle-icon {
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover .theme-toggle-icon {
+    transform: rotate(20deg);
+}
+
+.theme-toggle-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    user-select: none;
+}
+
+/* Ensure label is visible */
+body:not(.light-theme) .theme-toggle-label {
+    color: rgb(220, 220, 220);
+}
+
+body.light-theme .theme-toggle-label {
+    color: rgb(30, 30, 30);
+}
+
+/* Hide label on small screens */
+@media screen and (max-width: 768px) {
+    .theme-toggle {
+        padding: 8px;
+        top: 65px;
+        right: 15px;
+    }
+    
+    .theme-toggle-label {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .theme-toggle {
+        top: 110px;
+        right: 10px;
+    }
+}
+
+/* Animation when theme changes */
+@keyframes themeSwitch {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+body.theme-switching {
+    animation: themeSwitch 0.3s ease;
+}
+
+/* Print mode - always use light theme */
+@media print {
+    body {
+        --bg-primary: white;
+        --bg-secondary: white;
+        --bg-tertiary: white;
+        --bg-header: white;
+        --bg-card: white;
+        
+        --text-primary: black;
+        --text-secondary: black;
+        --text-tertiary: black;
+        --text-muted: #666;
+        --text-faded: #999;
+        
+        --border-primary: #ccc;
+        --border-secondary: #ddd;
+        --border-light: #eee;
+    }
+    
+    .theme-toggle {
+        display: none !important;
+    }
+}
+
+/* Apply theme colors to body */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Global text color classes */
+.text-primary {
+    color: var(--text-primary);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+/* Global background color classes */
+.bg-primary {
+    background-color: var(--bg-primary);
+}
+
+.bg-secondary {
+    background-color: var(--bg-secondary);
+}
+
+.bg-card {
+    background-color: var(--bg-card);
+}

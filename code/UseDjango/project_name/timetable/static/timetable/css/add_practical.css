@@ -1,0 +1,247 @@
+/* =====================================================
+   Add Practical  v2
+   ===================================================== */
+
+main {
+    background-color: var(--bg-main);
+}
+
+/* -- Page wrapper ----------------------------------- */
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 16px 60px;
+    background: transparent;
+    border: none;
+    box-sizing: border-box;
+}
+
+/* -- Card ------------------------------------------- */
+.form-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 16px;
+}
+
+/* -- Page title ------------------------------------- */
+.mainLabel {
+    color: var(--text-primary);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mainLabel::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 22px;
+    border-radius: 3px;
+    background: #ec4899;
+    flex-shrink: 0;
+}
+
+/* -- Form group spacing ----------------------------- */
+.formGroup {
+    margin-bottom: 22px;
+}
+
+/* -- Inline label + input rows (name, hours) -------- */
+.formGroup > label {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.formGroup > input[type="text"],
+.formGroup > input[type="number"] {
+    display: block;
+    width: 100%;
+    padding: 10px 13px;
+    border-radius: 8px;
+    border: 1px solid var(--border-primary);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formGroup > input[type="text"]:focus,
+.formGroup > input[type="number"]:focus {
+    outline: none;
+    border-color: #ec4899;
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.16);
+}
+
+/* -- Section subtitle (Select Teachers) ------------ */
+.subLabel {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+/* -- Django's checkbox <ul> reset ------------------- */
+.formGroup ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+/* -- Each checkbox row (li > label) ----------------- */
+.formGroup ul li label,
+.formGroup ul li > label {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 14px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.14s, border-color 0.14s, box-shadow 0.14s;
+    user-select: none;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.formGroup ul li label:hover {
+    background: var(--table-row-hover);
+    border-color: #ec4899;
+    box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.12);
+}
+
+.formGroup ul li:has(input[type="checkbox"]:checked) label {
+    background: rgba(236, 72, 153, 0.1);
+    border-color: #ec4899;
+}
+
+.formGroup ul li input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #ec4899;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* -- Save button ------------------------------------ */
+.saveBtn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #ec4899, #db2777);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(236, 72, 153, 0.30);
+    transition: filter 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    margin-bottom: 0;
+    height: auto;
+}
+
+.saveBtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(236, 72, 153, 0.45);
+}
+
+/* -- Cancel / Back link ----------------------------- */
+.redirectLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 11px;
+    background: linear-gradient(135deg, #64748b, #475569);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+    transition: opacity 0.2s, transform 0.15s;
+    box-sizing: border-box;
+    height: auto;
+}
+
+.redirectLink:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+/* -- Error styles ----------------------------------- */
+.error-container {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    border-left: 5px solid #c92a2a;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: slideDown 0.3s ease-out;
+}
+
+.error-icon { font-size: 22px; flex-shrink: 0; }
+.error-messages { flex: 1; }
+
+.error-message {
+    color: #fff;
+    font-weight: 500;
+    margin: 4px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.field-error { margin-top: 4px; margin-bottom: 8px; }
+
+.error-text {
+    display: block;
+    color: #f87171;
+    background: rgba(248,113,113,0.1);
+    border-left: 3px solid #f87171;
+    padding: 7px 11px;
+    border-radius: 5px;
+    font-size: 13px;
+    margin: 3px 0;
+    font-weight: 500;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* -- Responsive ------------------------------------- */
+@media screen and (max-width: 600px) {
+    .container { margin: 20px auto; padding: 0 10px 40px; }
+    .form-container { padding: 22px 18px; }
+    .mainLabel { font-size: 17px; }
+}

@@ -1,0 +1,474 @@
+
+*{
+    margin: 0;
+    padding: 0;
+}
+html, body{
+    height: 100%;
+}
+body {
+    background: var(--bg-primary);
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-primary);
+}
+
+/* Light theme gradient override */
+body.light-theme,
+html.light-theme-loading body {
+    background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+}
+
+/* Dark theme gradient - only when NOT light theme (including pre-load state) */
+html:not(.light-theme-loading) body:not(.light-theme) {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+
+
+/* Navbar container */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background: var(--bg-header);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-secondary);
+    box-shadow: 0 4px 16px var(--shadow-color);
+    height: 40px;
+    z-index: 100;
+}
+
+/* Dark theme navbar */
+body:not(.light-theme) .navbar {
+    background: rgba(15, 23, 42, 0.8);
+    border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.logoSection{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+/* Logo */
+.logo {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: 'Pixelify Sans', sans-serif;
+    padding-left: 10px;
+    margin-left: 25px;
+}
+.logoIcon{
+    height: 40px;
+    /* background-color: rgb(49, 49, 3); */
+    margin-left: 10px;
+}
+/* Nav links */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0px 10px;
+}
+
+.nav-links li a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 15px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: var(--text-primary);
+    background: var(--accent-blue-light);
+    border: 1px solid var(--border-secondary);
+}
+
+/* Dark theme nav links */
+body:not(.light-theme) .nav-links li a {
+    color: #e5e7eb;
+}
+
+body:not(.light-theme) .nav-links li a:hover {
+    color: #fff;
+    background: rgba(99, 102, 241, 0.2);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+}
+
+/* Logged-in user pill in navbar */
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 8px;
+    padding-left: 18px;
+    border-left: 1px solid var(--border-secondary);
+}
+
+.nav-username {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nav-logout-btn {
+    font-size: 13px !important;
+    padding: 5px 12px !important;
+    border-radius: 6px !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid var(--border-secondary) !important;
+    background: transparent !important;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.nav-logout-btn:hover {
+    color: #ef4444 !important;
+    border-color: rgba(239, 68, 68, 0.5) !important;
+    background: rgba(239, 68, 68, 0.08) !important;
+}
+
+body:not(.light-theme) .nav-username {
+    color: #9ca3af;
+}
+
+body:not(.light-theme) .nav-logout-btn {
+    color: #9ca3af !important;
+    border-color: rgba(99, 102, 241, 0.25) !important;
+}
+
+body:not(.light-theme) .nav-logout-btn:hover {
+    color: #f87171 !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* to change the active page in navbar */
+#activeNavPage{
+    color: #a78bfa;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 8px;
+}
+
+body.light-theme #activeNavPage {
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+main{
+    margin: 0px;
+    padding: 10px;
+    background: var(--bg-primary);
+    flex:1;
+    margin-top: 65px;
+}
+
+/* Dark theme main gradient */
+body:not(.light-theme) main {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+}
+
+/* Light theme main gradient */
+body.light-theme main {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+}
+
+.footerBar {
+    box-sizing: border-box;
+    height: 40px;
+    width: 100%;
+    background: var(--bg-header);
+    color: var(--text-muted);
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 24px;
+    border-top: 1px solid var(--border-secondary);
+    font-size: 13px;
+}
+
+.footer-home-link {
+    color: #818cf8;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+.footer-home-link:hover {
+    color: #a78bfa;
+}
+.footer-spacer {
+    width: 40px;
+}
+
+/* Dark theme footer */
+body:not(.light-theme) .footerBar {
+    background: rgba(15, 23, 42, 0.9);
+    color: #9ca3af;
+    border-top: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+/* Tablet screens */
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 12px 10px;
+        height: auto;
+    }
+
+    .logo {
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+    .logoIcon {
+        height: 30px;
+        margin-left: 5px;
+    }
+
+    .nav-links {
+        gap: 15px;
+        padding: 0px 5px;
+    }
+
+    .nav-links li a {
+        font-size: 15px;
+        padding: 6px 12px;
+    }
+
+    main {
+        margin-top: 60px;
+        padding: 5px;
+    }
+
+    .footerBar {
+        font-size: 14px;
+        padding: 0 10px;
+        text-align: center;
+    }
+}
+
+/* Mobile screens */
+@media screen and (max-width: 480px) {
+    .navbar {
+        flex-direction: column;
+        padding: 8px 5px;
+        height: auto;
+    }
+
+    .logoSection {
+        margin-bottom: 8px;
+    }
+
+    .logo {
+        font-size: 18px;
+        margin-left: 5px;
+    }
+
+    .logoIcon {
+        height: 25px;
+        margin-left: 0;
+    }
+
+    .nav-links {
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-links li a {
+        font-size: 13px;
+        padding: 5px 10px;
+    }
+
+    main {
+        margin-top: 100px;
+        padding: 5px;
+    }
+
+    .footerBar {
+        font-size: 12px;
+        height: 35px;
+    }
+}
+
+
+/* ==================== GLOBAL BUTTON SYSTEM ==================== */
+/*
+ * Unified button design system.
+ * Every interactive button site-wide uses these base classes.
+ *
+ * SIZE variants   →  (default = md, add class for others)
+ *   .btn-sm   — table-row actions      (padding: 6px 14px, font 13px)
+ *   .btn-md   — standard page actions  (padding: 9px 20px, font 14px)  ← DEFAULT
+ *   .btn-lg   — hero / primary CTAs    (padding: 12px 24px, font 15px)
+ *
+ * COLOR variants  →  choose one
+ *   .btn-indigo  — primary navigation / add department
+ *   .btn-green   — add / save actions
+ *   .btn-red     — delete actions
+ *   .btn-blue    — edit / view actions
+ *   .btn-ghost   — back / secondary (bordered, no fill)
+ */
+
+/* ── Base reset shared by every button ── */
+.btn-sm,
+.btn-md,
+.btn-lg,
+.btn-indigo,
+.btn-green,
+.btn-red,
+.btn-blue,
+.btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease, background 0.18s ease;
+    letter-spacing: 0.2px;
+    line-height: 1;
+}
+
+/* ── SIZE variants ── */
+.btn-sm {
+    padding: 6px 14px;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+.btn-md {
+    padding: 9px 20px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.btn-lg {
+    padding: 12px 24px;
+    font-size: 15px;
+    border-radius: 8px;
+}
+
+/* ── COLOR variants ── */
+
+/* Indigo — primary CTAs (Add Department, nav actions) */
+.btn-indigo {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.30);
+}
+.btn-indigo:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+    color: #ffffff;
+}
+.btn-indigo:active { transform: translateY(0); }
+
+/* Green — add / save */
+.btn-green {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.28);
+}
+.btn-green:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.42);
+    color: #ffffff;
+}
+.btn-green:active { transform: translateY(0); }
+
+/* Red — delete */
+.btn-red {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.28);
+}
+.btn-red:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.42);
+    color: #ffffff;
+}
+.btn-red:active { transform: translateY(0); }
+
+/* Blue — edit / view */
+.btn-blue {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.28);
+}
+.btn-blue:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.42);
+    color: #ffffff;
+}
+.btn-blue:active { transform: translateY(0); }
+
+/* Ghost — back / secondary (borders only, no bright fill) */
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
+    box-shadow: none;
+}
+.btn-ghost:hover {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.45);
+    color: #a78bfa;
+    transform: translateY(-1px);
+}
+body:not(.light-theme) .btn-ghost {
+    color: #9ca3af;
+}
+.btn-ghost:active { transform: translateY(0); }
+
+/* ── Utility: full-width block button ── */
+.btn-block {
+    display: flex;
+    width: 100%;
+}
+
+/* ── Utility: top margin for "add" buttons below tables ── */
+.btn-mt {
+    margin-top: 12px;
+}
+
+/* ── Mobile: full-width buttons stack nicely ── */
+@media screen and (max-width: 480px) {
+    .btn-lg {
+        width: 100%;
+    }
+}

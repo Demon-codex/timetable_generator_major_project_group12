@@ -1,0 +1,221 @@
+{% extends 'timetable/template.html' %}
+{% load static %}
+
+{% block title %}Home - Automated Timetable Scheduling System{% endblock %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'timetable/css/home.css'%}?v=2"> {% endblock %}
+
+{% block nav_home %}activeNavPage{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">Automated Timetable Scheduling System</div>
+                <h1 class="hero-title">
+                    Dashboard for
+                    <span class="gradient-text">Department Timetables</span>
+                </h1>
+                <p class="hero-description">
+                    Configure departments, teachers, classrooms, labs, recess windows, year-wise subjects,
+                    and practical sessions. Generate conflict-aware weekly timetables using the project scheduler.
+                </p>
+                <div class="hero-buttons">
+                    <a href="{% url 'timetable:setup' %}" class="btn-lg btn-indigo">
+                        <span>Open Setup</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stats.departments }}</div>
+                        <div class="stat-label">Departments</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stats.years }}</div>
+                        <div class="stat-label">Academic Years</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stats.saved_timetables }}</div>
+                        <div class="stat-label">Saved Timetables</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="visual-card card-1">
+                    <div class="card-icon">🏫</div>
+                    <div class="card-title">Department Setup</div>
+                    <div class="card-bar"></div>
+                </div>
+                <div class="visual-card card-2">
+                    <div class="card-icon">🧪</div>
+                    <div class="card-title">Lecture + Practical Planning</div>
+                    <div class="card-bar"></div>
+                </div>
+                <div class="visual-card card-3">
+                    <div class="card-icon">📄</div>
+                    <div class="card-title">PDF and Excel Export</div>
+                    <div class="card-bar"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="project-snapshot">
+            <div class="section-header">
+                <h2 class="section-title">System Snapshot</h2>
+                <p class="section-subtitle">Live data from your timetable database</p>
+            </div>
+            <div class="snapshot-grid">
+                <article class="snapshot-card">
+                    <div class="snapshot-label">Subjects Configured</div>
+                    <div class="snapshot-value">{{ stats.subjects }}</div>
+                </article>
+                <article class="snapshot-card">
+                    <div class="snapshot-label">Practicals Configured</div>
+                    <div class="snapshot-value">{{ stats.practicals }}</div>
+                </article>
+                <article class="snapshot-card">
+                    <div class="snapshot-label">Years Registered</div>
+                    <div class="snapshot-value">{{ stats.years }}</div>
+                </article>
+                <article class="snapshot-card">
+                    <div class="snapshot-label">Saved Timetable Versions</div>
+                    <div class="snapshot-value">{{ stats.saved_timetables }}</div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="section-header">
+                <h2 class="section-title">Timetable Workflow</h2>
+                <p class="section-subtitle">This matches the real flow used by your timetable system</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-number">01</div>
+                    <div class="feature-icon">🏫</div>
+                    <h3 class="feature-title">Configure Department</h3>
+                    <p class="feature-description">
+                        Add department working hours, week days, and recess windows.
+                        Register teachers, classrooms, and lab rooms in one setup form.
+                    </p>
+                    <div class="feature-metrics">
+                        <span class="metric">Department Setup</span>
+                        <span class="metric">Recess Slots</span>
+                        <span class="metric">Resource Data</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">02</div>
+                    <div class="feature-icon">📚</div>
+                    <h3 class="feature-title">Define Year Data</h3>
+                    <p class="feature-description">
+                        For each year, add subjects and practicals with required weekly hours,
+                        assign teachers, and allocate classrooms and labs.
+                    </p>
+                    <div class="feature-metrics">
+                        <span class="metric">Year Setup</span>
+                        <span class="metric">Subjects</span>
+                        <span class="metric">Practicals</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">03</div>
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">Generate and Evaluate</h3>
+                    <p class="feature-description">
+                        Run timetable generation with scheduler constraints.
+                        Review generated timetables, fitness score, and teacher workload details.
+                    </p>
+                    <div class="feature-metrics">
+                        <span class="metric">Conflict Checks</span>
+                        <span class="metric">Fitness Score</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">04</div>
+                    <div class="feature-icon">💾</div>
+                    <h3 class="feature-title">Save, Compare, Export</h3>
+                    <p class="feature-description">
+                        Save multiple timetable versions per department,
+                        compare them later, and export to PDF or Excel.
+                    </p>
+                    <div class="feature-metrics">
+                        <span class="metric">Version History</span>
+                        <span class="metric">PDF/Excel</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="recent-data">
+            <div class="recent-grid">
+                <article class="recent-card">
+                    <h3 class="recent-title">Recent Departments</h3>
+                    {% if recent_departments %}
+                        <ul class="recent-list">
+                            {% for department in recent_departments %}
+                                <li class="recent-item">
+                                    <div class="recent-item-top">
+                                        <span class="recent-name">{{ department.department_name }}</span>
+                                        <a class="btn-sm btn-ghost" href="{% url 'timetable:years' department.id %}">Open</a>
+                                    </div>
+                                    <div class="recent-meta">
+                                        {{ department.years_total }} years | {{ department.recess_total }} recess windows | {{ department.saved_tt_total }} saved timetables
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="empty-state">No departments yet. Start by creating one in Setup.</p>
+                    {% endif %}
+                </article>
+
+                <article class="recent-card">
+                    <h3 class="recent-title">Recent Saved Timetables</h3>
+                    {% if recent_timetables %}
+                        <ul class="recent-list">
+                            {% for timetable in recent_timetables %}
+                                <li class="recent-item">
+                                    <div class="recent-item-top">
+                                        <span class="recent-name">{{ timetable.name }}</span>
+                                        <a class="btn-sm btn-ghost" href="{% url 'timetable:view_saved_timetable' timetable.id %}">View</a>
+                                    </div>
+                                    <div class="recent-meta">
+                                        {{ timetable.department.department_name }} | {{ timetable.created_at|date:"d M Y, h:i A" }}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="empty-state">No saved timetables yet. Generate one from any department.</p>
+                    {% endif %}
+                </article>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to continue your timetable workflow?</h2>
+                <p class="cta-description">Go to Setup and continue configuring or generating timetables</p>
+                <a href="{% url 'timetable:setup' %}" class="btn-lg btn-indigo">
+                    Open Setup
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+    </div>
+{% endblock %}

@@ -1,0 +1,37 @@
+
+
+{% extends 'timetable/template.html' %}
+{% load static %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'timetable/css/add_subject.css'%}?v=1"> {% endblock %}
+
+
+
+{% block content %}
+
+<div class="container">
+    <h2 class="mainLabel">Edit {{ year.year_name }}</h2>
+    <div class="formContainer">
+        <form method="post">
+            {% csrf_token %}
+
+            <label>
+                Number of students in each practical batch
+            </label>
+            {{ form.number_of_students_in_batch }}
+
+            <br><br>
+
+            <button type="submit" class="btn-md btn-indigo btn-block">
+                Save Changes
+            </button>
+        </form>
+    </div>
+
+        <a href="{% url 'timetable:years' department.id %}" class="btn-md btn-ghost btn-block">
+            Cancel
+        </a>
+
+
+</div>
+{% endblock %}

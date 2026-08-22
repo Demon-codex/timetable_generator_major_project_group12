@@ -1,0 +1,450 @@
+
+{% extends 'timetable/template.html' %}
+{% load static %}
+
+
+{% block title %}generate{% endblock %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'timetable/css/view_saved_timetable.css' %}?v=3"> {% endblock %}
+
+{% block nav_generate %}activeNavPage{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:home' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="breadcrumb-icon">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                <span class="breadcrumb-text">Home</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:setup' %}">
+                <span class="breadcrumb-text">Setup</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:years' department.id %}">
+                <span class="breadcrumb-text">{{ department.department_name }}</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:department_saved_timetable_list' department.id %}">
+                <span class="breadcrumb-text">Saved Timetables</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-text">{{ tt_name }}</span>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="mainContainer">
+
+
+
+    <!-- Debugging info -->
+    <!-- <pre>{{ fitness|pprint }}</pre>
+
+
+ 
+    <pre>{{ lecture_hours_table }}</pre>
+    <pre>{{ practical_hours_table }}</pre>
+    <pre>{{ display_tt }}</pre> -->
+
+    <div class="departmentContainer">
+
+        <h2 class="MainLabel">Department: {{ department.department_name }}</h2>
+        <h2 class="MainLabel">Viewing saved timetable name: {{ tt_name }}</h2>
+
+        <div class="action-buttons">
+            <a href="{% url 'timetable:department_saved_timetable_list' department.id %}" class="btn-md btn-ghost">← Back to list</a>
+            <button onclick="window.print()" class="btn-md btn-indigo print-btn">🖨️ Print Timetable</button>
+            <a href="{% url 'timetable:export_timetable_excel' tt_id %}" class="btn-md btn-green excel-btn">📊 Export to Excel</a>
+            <a href="{% url 'timetable:export_timetable_pdf' tt_id %}" class="btn-md btn-red pdf-btn">📄 Export to PDF</a>
+        </div>
+
+     </div>
+    
+    <!-- bar graph of teacher vs hours/week -->
+    <div class="teacherVShourChartContainer">
+        <h3 class="graphHeading">Teacher Workload Across Years</h3>
+        <canvas id="teacherHourYearChart"></canvas>
+    </div>
+
+
+    {% for year, data in display_tt.items %}
+        <div class="eachTimetableContainer">
+            <div class="eachTimetableHeader">
+                <h2 class="yearCount">{{ forloop.counter }}</h2>
+                <h2 class="yearNameLabel">Year: {{ year }}</h2>
+            </div>
+            <details class="dropdown">
+                <summary class="dropdown-header">
+                    <!-- <h3 class="subLabel">Hours validation</h3> -->
+                    <h3 class="subLabelSmall">Validation of Assigned Hours vs Expected Hours</h3>
+                    <!-- <span class="arrow">▾</span> -->
+                </summary>
+                <div class="dropdown-content">
+                <!--  validation of assigned hours vs expected hours -->
+                    <div class="eachTimetableValidationContainer">
+                        <!-- lecture table -->
+                        <div class="lectureAssignedVSGivenContainer">
+                            {% for table_year, rows in lecture_hours_table.items %}
+                                {% if year == table_year %}
+                                    <h3 class="subLabel">{{ year|title }} – Lecture Hours Validation</h3>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Lecture</th>
+                                                <th>Expected Hours / Week</th>
+                                                <th>Assigned Hours / Week</th>
+                                                <!-- <th>Status</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for row in rows %}
+                                                <tr class="{% if not row.match %}table-danger{% else %}table-success{% endif %}">
+                                                    <td>{{ row.lecture }}</td>
+                                                    <td>{{ row.expected }}</td>
+                                                    <td>{{ row.assigned }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% endif %}
+
+                            {% endfor %}
+                        </div>
+                        <!-- practical table -->
+                        <div class="practicalAssignedVSGivenContainer">
+                            {% for table_year, rows in practical_hours_table.items %}
+                                {% if table_year == year %}
+
+                                    <h3 class="subLabel">{{ year|title }} – Practical Hours Validation</h3>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Practical</th>
+                                                <th>Batch</th>
+                                                <th>Expected Hours / Week</th>
+                                                <th>Assigned Hours / Week</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for row in rows %}
+                                                <tr class="{% if not row.match %}table-danger{% else %}table-success{% endif %}">
+                                                    <td>{{ row.practical }}</td>
+                                                    <td>{{ row.batch }}</td>
+                                                    <td>{{ row.expected }}</td>
+                                                    <td>{{ row.assigned }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div> 
+                </div>
+            </details>
+
+
+
+            <h3 class="subLabel">Timetable Generated:</h3>
+            <table class="timeTable">
+                <tr>
+                    <th>Time</th>
+                    {% for day in data.days %}
+                        <th>{{ day }}</th>
+                    {% endfor %}
+                </tr>
+
+                {% for row in data.rows %}
+                    <tr>
+                        <td><strong>{{ row.time }}</strong></td>
+
+                        {# check if its recess row #}
+                        {% if row.cells.0 and row.cells.0.type == "recess" %}
+                            <td colspan="{{ data.days|length }}" class="recess">
+                                RECESS
+                            </td>
+
+                        {% else %}
+                            
+                            {% for cell in row.cells %}
+
+
+                                <td class="{{ cell.type}}">
+                                    {% if cell %}
+
+                                        {# if lecture #}
+                                        {% if cell.type == "lecture" %}
+                                            <div 
+                                            class="lectureCellContainer"
+                                            data-lecture="{{ cell.details.lecture }}">
+                                            <!-- metadata to identify a slot with a perticular lecture -->
+                                                <div class="LecCell_Name">
+                                                    <img src="{% static 'timetable/images/lecture2.svg' %}" alt="Lecture" width="15"> {{ cell.details.lecture }} 
+                                                </div>
+                                                <div class="cell_Fac">
+                                                    <img src="{% static 'timetable/images/person.svg' %}" alt="" width="15"> {{ cell.details.teacher }}
+                                                </div>
+                                                <div class="LecCell_Room">
+                                                    <img src="{% static 'timetable/images/classRoom.svg' %}" alt="" width="15"> {{ cell.details.classroom }}
+                                                </div>
+                                            </div>
+
+                                        {# if practical #}
+                                        {% elif cell.type == "practical" %}
+                                            {% for batch in cell.batches %}
+                                                <div class="practicalCellContainer"
+                                                data-practical="{{ batch.lab }}">
+                                                    <div class="pracCell_Name">
+                                                        <img src="{% static 'timetable/images/lab.svg' %}" alt="Practical" width="15"> {{ batch.lab }} 
+                                                    </div>
+                                                    <div class="cell_Fac">
+                                                        <img src="{% static 'timetable/images/person.svg' %}" alt="" width="15"> {{ batch.faculty }}
+                                                    </div>
+                                                    <div class="pracCell_Batch">
+                                                        <img src="{% static 'timetable/images/batchGroup.svg' %}" alt="" width="15"> {{ batch.batch }} 
+                                                    </div>
+                                                    <div class="pracCell_Room">
+                                                        <img src="{% static 'timetable/images/labRoom.svg' %}" alt="" width="15"> {{ batch.room }}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% else %}
+                                            _
+                                        {% endif %}
+
+
+
+                                    
+                                </td>
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endfor %}
+
+
+
+
+
+
+
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// generate distinct colors for each year
+function generateColor(index) {
+
+    const hue = (index * 240.5) % 360;   // golden angle
+    return `hsla(${hue}, 75%, 65%, 0.84)`;
+}
+
+function getThemeChartColors() {
+    const rootStyles = getComputedStyle(document.body);
+    const chartLabel = rootStyles.getPropertyValue('--chart-label').trim() || '#b4bab7';
+    const chartGrid = rootStyles.getPropertyValue('--chart-grid').trim() || '#686868';
+    return { chartLabel, chartGrid };
+}
+
+let teacherHourChart = null;
+
+try {
+    const chartDataRaw = '{{ teacher_year_chart|escapejs }}';
+    console.log('Chart data raw:', chartDataRaw);
+    
+    const chartData = JSON.parse(chartDataRaw);
+    console.log('Chart data parsed:', chartData);
+    
+    // Check if chartData has the expected structure
+    if (!chartData || !chartData.teachers || !chartData.years) {
+        console.error('Invalid chart data structure:', chartData);
+        document.getElementById('teacherHourYearChart').parentElement.innerHTML = '<p style="color: #b4bab7; text-align: center; padding: 20px;">No chart data available. Please ensure teachers and years are properly configured.</p>';
+        throw new Error('Invalid chart data');
+    }
+    
+    // Check if there's any data to display
+    if (chartData.teachers.length === 0 || Object.keys(chartData.years).length === 0) {
+        console.warn('No data to display in chart');
+        document.getElementById('teacherHourYearChart').parentElement.innerHTML = '<p style="color: #b4bab7; text-align: center; padding: 20px;">No data to display. Please add teachers and subjects to the timetable.</p>';
+        throw new Error('No data to display');
+    }
+
+    const { chartLabel, chartGrid } = getThemeChartColors();
+    const ctx = document.getElementById("teacherHourYearChart").getContext("2d");
+
+// Build datasets dynamically (ANY number of years)
+const datasets = Object.entries(chartData.years).map(
+    ([year, values], index) => ({
+        label: year.toUpperCase(),
+        data: values,
+        backgroundColor: generateColor(index),
+
+        borderWidth: 1,
+        barThickness: 28,
+        maxBarThickness: 40,
+    })
+);
+
+teacherHourChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+        labels: chartData.teachers,
+        datasets: datasets
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+                title: { 
+                    display: true,
+                    text: "Teachers",
+                    color: chartLabel,
+                    font:{
+                        size:14
+                    }
+                },
+                ticks:{
+                    maxRotation:90,
+                    minRotation:90,
+                    color: chartLabel
+                },
+                grid:{
+                    display:false
+                }
+            },
+            y: {
+                stacked: true,
+                beginAtZero: true,
+                title: {
+                     display: true, 
+                     text: "Hours / Week",
+                     color: chartLabel,
+                     font:{
+                        size:18
+                     },
+                },
+                ticks:{
+                    color: chartLabel
+                },
+                grid:{
+                    display:true,
+                    color: chartGrid
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                mode: "index",
+                intersect: false
+            },
+            legend: {
+                position: "bottom",
+                labels:{
+                    color: chartLabel,
+                    font:{
+                        size:18
+                    }
+                }
+            }
+        }
+    }
+});
+
+} catch (error) {
+    console.error('Error initializing chart:', error);
+}
+
+document.addEventListener('chartThemeChanged', () => {
+    if (!teacherHourChart) {
+        return;
+    }
+
+    const { chartLabel, chartGrid } = getThemeChartColors();
+
+    teacherHourChart.options.scales.x.title.color = chartLabel;
+    teacherHourChart.options.scales.x.ticks.color = chartLabel;
+    teacherHourChart.options.scales.y.title.color = chartLabel;
+    teacherHourChart.options.scales.y.ticks.color = chartLabel;
+    teacherHourChart.options.scales.y.grid.color = chartGrid;
+    teacherHourChart.options.plugins.legend.labels.color = chartLabel;
+
+    teacherHourChart.update('none');
+});
+
+// for coloring lecture cells based on lecture name
+function stringToColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash) % 360;
+    const isLightTheme = document.body.classList.contains('light-theme');
+
+    if (isLightTheme) {
+        return {
+            background: `hsla(${hue}, 58%, 84%, 0.95)`,
+            border: `hsl(${hue}, 42%, 46%)`,
+            text: `hsl(${hue}, 28%, 18%)`
+        };
+    }
+
+    return {
+        background: `hsla(${hue}, 46%, 32%, 0.78)`,
+        border: `hsl(${hue}, 70%, 60%)`,
+        text: 'rgb(226, 232, 240)'
+    };
+}
+
+function applyCellColors() {
+    document.querySelectorAll(".lectureCellContainer").forEach(el => {
+        const lecture = el.dataset.lecture;
+        const colors = stringToColor(lecture);
+
+        el.style.backgroundColor = colors.background;
+        el.style.border = `1.8px solid ${colors.border}`;
+        el.style.color = colors.text;
+    });
+
+    document.querySelectorAll(".practicalCellContainer").forEach(el => {
+        const practical = el.dataset.practical;
+        const colorsPrac = stringToColor(practical);
+
+        el.style.backgroundColor = colorsPrac.background;
+        el.style.border = `1.8px solid ${colorsPrac.border}`;
+        el.style.color = colorsPrac.text;
+    });
+}
+
+applyCellColors();
+
+document.addEventListener('themeChanged', () => {
+    applyCellColors();
+});
+</script>
+
+{% endblock %}

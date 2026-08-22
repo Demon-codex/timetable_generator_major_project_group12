@@ -1,0 +1,204 @@
+{% extends 'timetable/template.html' %}
+{% load static %}
+
+{% block title %}Compare Timetables{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'timetable/css/compare_timetables.css' %}">
+{% endblock %}
+
+{% block nav_generate %}activeNavPage{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:home' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="breadcrumb-icon">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                <span class="breadcrumb-text">Home</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:setup' %}">
+                <span class="breadcrumb-text">Setup</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:years' department.id %}">
+                <span class="breadcrumb-text">{{ department.department_name }}</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:department_saved_timetable_list' department.id %}">
+                <span class="breadcrumb-text">Saved Timetables</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-text">Compare</span>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="mainContainer">
+    <div class="header">
+        <h2>Timetable Comparison - {{ department.department_name }}</h2>
+        <a href="{% url 'timetable:department_saved_timetable_list' department.id %}" class="btn-md btn-ghost">Back to List</a>
+    </div>
+
+    <div class="comparison-grid">
+        {% for data in comparison_data %}
+        <div class="comparison-card {% if data.timetable.id == best_tt_id %}best-timetable{% endif %}">
+            {% if data.timetable.id == best_tt_id %}
+            <div class="best-badge">⭐ Recommended</div>
+            {% endif %}
+            
+            <div class="card-header">
+                <h3>{{ data.timetable.name }}</h3>
+                <p class="created-date">{{ data.timetable.created_at|date:"d M Y H:i" }}</p>
+            </div>
+
+            <div class="card-section">
+                <h4>Overall Metrics</h4>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <span class="metric-label">Fitness Score</span>
+                        <span class="metric-value fitness-score">{{ data.timetable.fitness|floatformat:2 }}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Years</span>
+                        <span class="metric-value">{{ data.stats.years_count }}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Teachers</span>
+                        <span class="metric-value">{{ data.stats.teacher_count }}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Avg Teacher Hours</span>
+                        <span class="metric-value">{{ data.stats.avg_teacher_hours }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-section">
+                <h4>Hours Distribution</h4>
+                <div class="hours-breakdown">
+                    <div class="hours-item">
+                        <span class="hours-label">Lecture Hours</span>
+                        <span class="hours-value">{{ data.stats.total_lecture_hours }}</span>
+                    </div>
+                    <div class="hours-item">
+                        <span class="hours-label">Practical Hours</span>
+                        <span class="hours-value">{{ data.stats.total_practical_hours }}</span>
+                    </div>
+                    <div class="hours-item total">
+                        <span class="hours-label">Total Hours</span>
+                        <span class="hours-value">{{ data.stats.total_hours }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-section">
+                <h4>Teacher Workload Balance</h4>
+                <div class="workload-summary">
+                    <div class="workload-item balanced">
+                        <span class="workload-icon">✓</span>
+                        <span class="workload-count">{{ data.stats.balanced_teachers }}</span>
+                        <span class="workload-label">Balanced</span>
+                    </div>
+                    <div class="workload-item overloaded">
+                        <span class="workload-icon">⚠</span>
+                        <span class="workload-count">{{ data.stats.overloaded_teachers }}</span>
+                        <span class="workload-label">Overloaded</span>
+                    </div>
+                    <div class="workload-item underutilized">
+                        <span class="workload-icon">📊</span>
+                        <span class="workload-count">{{ data.stats.underutilized_teachers }}</span>
+                        <span class="workload-label">Under-utilized</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-section">
+                <h4>Quality Indicators</h4>
+                <div class="quality-indicators">
+                    <div class="indicator {% if data.stats.overloaded_teachers == 0 %}good{% else %}warning{% endif %}">
+                        <span class="indicator-icon">{% if data.stats.overloaded_teachers == 0 %}✓{% else %}⚠{% endif %}</span>
+                        <span class="indicator-text">
+                            {% if data.stats.overloaded_teachers == 0 %}
+                                No overloaded teachers
+                            {% else %}
+                                {{ data.stats.overloaded_teachers }} teacher{{ data.stats.overloaded_teachers|pluralize }} overloaded
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="indicator {% if data.stats.underutilized_teachers == 0 %}good{% else %}info{% endif %}">
+                        <span class="indicator-icon">{% if data.stats.underutilized_teachers == 0 %}✓{% else %}ℹ{% endif %}</span>
+                        <span class="indicator-text">
+                            {% if data.stats.underutilized_teachers == 0 %}
+                                All teachers utilized
+                            {% else %}
+                                {{ data.stats.underutilized_teachers }} teacher{{ data.stats.underutilized_teachers|pluralize }} under-utilized
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="indicator {% if data.stats.balanced_teachers >= data.stats.teacher_count|add:'-1' %}good{% else %}info{% endif %}">
+                        <span class="indicator-icon">📈</span>
+                        <span class="indicator-text">
+                            {{ data.stats.balanced_teachers }}/{{ data.stats.teacher_count }} teachers balanced
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-actions">
+                <a href="{% url 'timetable:view_saved_timetable' data.timetable.id %}" class="btn-sm btn-blue">View Full Timetable</a>
+                <a href="{% url 'timetable:export_timetable_excel' data.timetable.id %}" class="btn-sm btn-green">Export Excel</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="comparison-summary">
+        <h3>Comparison Summary</h3>
+        <div class="summary-content">
+            <div class="summary-item">
+                <strong>Best Overall:</strong>
+                {% for data in comparison_data %}
+                    {% if data.timetable.id == best_tt_id %}
+                        <span class="highlight">{{ data.timetable.name }}</span> 
+                        (Fitness: {{ data.timetable.fitness|floatformat:2 }}, 
+                        {{ data.stats.balanced_teachers }} balanced teachers)
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="summary-item">
+                <strong>Criteria:</strong> Based on highest fitness score, most balanced teachers, and fewest overloaded teachers
+            </div>
+        </div>
+    </div>
+
+    <div class="print-controls">
+        <button onclick="window.print()" class="btn-md btn-indigo print-btn">🖨️ Print Comparison</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Highlight best timetable on load
+    document.addEventListener('DOMContentLoaded', function() {
+        const bestCard = document.querySelector('.best-timetable');
+        if (bestCard) {
+            bestCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,87 @@
+
+{% extends 'timetable/template.html' %}
+{% comment %} extends must be the first line and load static to use the static folder where extra css is stored{% endcomment %}
+{% load static %}
+
+{% block title %}Setup{% endblock %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'timetable/css/yearForm.css'%}?v=2"> {% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:home' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="breadcrumb-icon">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                <span class="breadcrumb-text">Home</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:setup' %}">
+                <span class="breadcrumb-text">Setup</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="{% url 'timetable:years' department.id %}">
+                <span class="breadcrumb-text">{{ department.department_name }}</span>
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-text">Add Year</span>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    
+    <!-- Display Non-Field Errors -->
+    {% if form.non_field_errors %}
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <div class="error-messages">
+            {% for error in form.non_field_errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <form id="yearSetupForm" method="post" data-autosave="true" data-autosave-key="year_setup_{{ department.id }}" data-undo-redo="true">
+        {% csrf_token %}
+        <h3 class="mainLabel">Year setup</h3>
+
+        {% for field in form %}
+            <div class="form-field">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="field-error">
+                        {% for error in field.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn-md btn-green btn-block">Save</button>
+    </form>
+    <a href="{% url 'timetable:years' department.id %}" class="btn-md btn-ghost btn-block">
+        Cancel
+    </a>
+
+</div>
+
+
+
+
+{% endblock %}

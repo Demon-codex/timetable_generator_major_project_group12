@@ -1,0 +1,479 @@
+
+
+/* ==================== MAIN LAYOUT ==================== */
+
+/* department card header */
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--gradient-header-start), var(--gradient-header-end));
+  height: 85px;
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  margin-bottom: 25px;
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 600;
+  padding: 0 35px;
+  box-shadow: var(--shadow-md);
+  max-width: 1300px;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(99, 102, 241, 0.6) 30%, 
+    rgba(59, 130, 246, 0.6) 70%, 
+    transparent);
+}
+
+main {
+    background-color: var(--bg-main);
+    min-height: 100vh;
+}
+
+.mainContainer{
+    padding: 30px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.tableContainer{
+    box-sizing: border-box;
+    background: linear-gradient(135deg, var(--gradient-container-start), var(--gradient-container-end));
+    padding: 35px;
+    border: 1px solid var(--border-primary);
+    border-radius: 14px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+/* ==================== BUTTONS ==================== */
+
+.generatebtn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  padding: 9px 20px;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.28);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.generatebtn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.42);
+}
+
+.deleteTtbtn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 4px rgba(239, 68, 68, 0.28);
+}
+
+.deleteTtbtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.40);
+}
+
+.viewTtbtn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 4px rgba(59, 130, 246, 0.28);
+}
+
+.viewTtbtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.40);
+}
+
+.redirectbtn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.30);
+    white-space: nowrap;
+}
+
+.redirectbtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+    color: white;
+}
+/* ==================== TABLE STYLING ==================== */
+
+.tableContainer table {
+  margin: 0 auto;
+  width: 100%;
+}
+
+table{
+    border-collapse: collapse;
+    border: none;
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+th, td{
+    padding: 18px;
+    border: 1px solid var(--border-secondary);
+}
+
+th{
+    background: linear-gradient(135deg, var(--gradient-table-header-start), var(--gradient-table-header-end));
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+/* Center align Actions column header */
+th:last-child {
+    text-align: center;
+}
+
+td {
+    background: var(--table-cell-bg);
+    font-size: 14px;
+}
+
+/* Center align Actions column */
+td:last-child {
+    text-align: center;
+}
+
+table tbody tr:hover td {
+    background: var(--table-row-hover);
+    transition: background 0.2s ease;
+}
+
+/* ==================== COMPARISON CONTROLS ==================== */
+
+.comparison-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 30px;
+    background: linear-gradient(135deg, var(--gradient-controls-start), var(--gradient-controls-end));
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-md);
+}
+
+.compare-btn {
+    padding: 11px 22px;
+    background: var(--table-cell-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border-primary);
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: not-allowed;
+    transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+}
+
+.compare-btn.active {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border-color: transparent;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+}
+
+.compare-btn.active:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.compare-btn:disabled {
+    opacity: 0.6;
+}
+
+.batch-delete-btn {
+    padding: 11px 22px;
+    background: var(--table-cell-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border-primary);
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: not-allowed;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.3px;
+}
+
+.batch-delete-btn:not(:disabled) {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border-color: transparent;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+}
+
+.batch-delete-btn:not(:disabled):hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.comparison-hint {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Checkbox column */
+.checkbox-col {
+    width: 45px;
+    text-align: center;
+    padding: 10px !important;
+}
+
+.checkbox-col input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #6366f1;
+}
+
+.tt-checkbox {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: #6366f1;
+}
+
+/* Table row hover with checkbox */
+table tbody tr:hover {
+    background-color: var(--table-row-hover);
+}
+
+table tbody tr:has(.tt-checkbox:checked) {
+    background-color: var(--table-row-selected) !important;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+/* Tablet screens */
+@media screen and (max-width: 768px) {
+    .mainContainer {
+        padding: 15px 10px;
+    }
+
+    .timetablesContainer {
+        padding: 15px;
+    }
+
+    .timetableCard {
+        padding: 15px;
+    }
+}
+
+/* Mobile screens */
+@media screen and (max-width: 480px) {
+    .mainContainer {
+        padding: 10px 5px;
+    }
+
+    .timetablesContainer {
+        padding: 10px;
+    }
+
+    .timetableCard {
+        padding: 12px;
+    }
+
+    .timetableName {
+        font-size: 18px;
+    }
+
+    .actionButtons {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .viewBtn, .deleteBtn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .backBtn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+    }
+}
+
+/* ==================== PAGINATION STYLES ==================== */
+
+.pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 30px;
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.7), rgba(30, 41, 59, 0.85));
+    border: 1px solid rgba(100, 116, 139, 0.4);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.pagination-info {
+    color: rgb(203, 213, 225);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    background: rgba(51, 65, 85, 0.6);
+    color: rgb(226, 232, 240);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.pagination-btn:hover:not(.disabled) {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-color: transparent;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+.pagination-btn.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.pagination-current {
+    padding: 0 15px;
+    color: rgb(226, 232, 240);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Pagination responsive */
+@media screen and (max-width: 768px) {
+    .pagination-container {
+        padding: 15px 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .pagination-info {
+        width: 100%;
+    }
+    
+    .pagination-controls {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .pagination-container {
+        padding: 10px 15px;
+    }
+    
+    .pagination-btn {
+        min-width: 32px;
+        height: 32px;
+        padding: 0 8px;
+        font-size: 13px;
+    }
+    
+    .pagination-current {
+        font-size: 13px;
+        padding: 0 10px;
+    }
+}

@@ -1,0 +1,572 @@
+
+
+/* ── Page header ── */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding: 16px 0 20px;
+    border-bottom: 1px solid var(--border-primary);
+    max-width: 1200px;
+    margin: 0 auto 28px;
+}
+.page-title {
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 5px;
+    letter-spacing: -0.4px;
+}
+.page-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+}
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+.btn-back:hover {
+    border-color: rgba(99, 102, 241, 0.5);
+    color: #a78bfa;
+    background: rgba(99, 102, 241, 0.08);
+}
+
+.mainContainer{
+    padding: 10px 100px;
+    background-color: var(--bg-main);
+    margin-bottom: 20px;
+    max-width: 1200px;
+    margin: auto;
+
+}
+.departmentContainer{
+    padding: 10px;
+}
+.MainLabel{
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.eachTimetableContainer{
+    margin-bottom: 40px;
+
+
+    background-color: var(--bg-main);
+    padding: 40px 50px;
+}
+.eachTimetableHeader{
+  border: 1px solid var(--border-primary);
+  background-color: var(--bg-card);
+
+  margin-bottom: 20px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  height: 70px;
+
+  color: var(--text-primary);
+  font-size: 20px;
+  max-width: 1300px;
+
+
+}
+/* yearCounter */
+.yearCount{
+    background-color: var(--table-cell-bg);
+    padding: 10px;
+
+    text-align: center;
+    /* box-shadow: 0px 0px 7px rgba(155, 133, 241, 0.956); */
+    border-radius: 5px;
+    border: 1px solid var(--border-primary);
+}
+.eachTimetableValidationContainer{
+    background-color: var(--bg-main);
+    padding: 30px 50px;
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.timeTable{
+    background-color: var(--bg-card);
+    padding: 30px 50px;
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    margin-bottom: 20px;
+
+}
+
+/* timetable table styling */
+table{
+    border-collapse: collapse;
+    border: none;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
+}
+
+th, td{
+    padding: 10px;
+    border: 1px solid var(--border-primary);
+}
+th{
+    background-color: var(--table-header-bg);
+}
+
+/* timetable cells types */
+.recess {
+    text-align: center;
+    font-weight: bold;
+    background-color: var(--table-header-bg);
+    border: 3px solid var(--border-primary);
+
+
+}
+/* .lecture{
+    background-color: rgba(155, 154, 155, 0.08);
+
+
+
+}
+.practical{
+    background-color: rgba(116, 121, 221, 0.08);
+
+} */
+.timeTable td:hover {
+    background-color: var(--table-row-hover);
+    transition: background-color 0.2s ease;
+}
+.lectureCellContainer{
+    /* border: 1.5px solid rgba(39, 8, 66, 0.638);
+    background-color: rgba(171, 131, 244, 0.188); */
+    padding: 5px;
+    border-radius: 8px;
+    background-color: rgba(236, 169, 88, 0.327);
+}
+.practicalCellContainer{
+    /* border: 1.5px solid rgba(39, 8, 66, 0.638);
+    background-color: rgba(221, 118, 244, 0.188); */
+    padding: 5px;
+    border-radius: 8px;
+    background-color: rgba(95, 158, 160, 0.33);
+    margin-bottom: 5px;
+}
+/* teacher vs hour chart */
+.teacherVShourChartContainer{
+    background-color: var(--bg-card);
+    padding: 28px;
+    margin-top: 20px;
+    border-radius: 5px;
+    max-width: 1200px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-primary);
+
+}
+
+.teacherChartViewport {
+    width: 100%;
+    overflow: hidden;
+    padding-bottom: 6px;
+    border-radius: 8px;
+}
+
+.teacherChartViewport::-webkit-scrollbar {
+    height: 8px;
+}
+
+.teacherChartViewport::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.45);
+    border-radius: 999px;
+}
+
+.teacherChartViewport::-webkit-scrollbar-track {
+    background: rgba(148, 163, 184, 0.12);
+    border-radius: 999px;
+}
+
+#teacherHourYearChart {
+    display: block;
+    width: 100% !important;
+    min-width: 100%;
+    height: 460px !important;
+}
+.graphHeading{
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: var(--text-secondary);
+}
+
+.chartHint {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.saveFormContainer {
+    margin: 18px 0 10px;
+}
+
+.saveForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 14px;
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    background: var(--bg-card);
+}
+
+.saveFormLabel {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.saveFormActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.saveInput {
+    flex: 1;
+    min-width: 220px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.savebtn,
+.backbtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    white-space: nowrap;
+}
+
+.savebtn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.28);
+}
+
+.backbtn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.28);
+}
+
+.savebtn:hover,
+.backbtn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+}
+
+.savebtn:hover {
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.42);
+}
+
+.backbtn:hover {
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.42);
+}
+
+.savebtn:active,
+.backbtn:active {
+    transform: translateY(0);
+}
+/* label */
+.yearNameLabel{
+    color: var(--text-secondary);
+    font-size: 25px;
+}
+.subLabel{
+    color: var(--text-secondary);
+    font-size: 21px;
+    margin: 20px 0px;
+}
+.pracCell_Name, .cell_Fac, .pracCell_Room{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+/* Tablet screens */
+@media screen and (max-width: 768px) {
+    .mainContainer {
+        padding: 15px 10px;
+    }
+
+    .generateForm {
+        padding: 15px;
+    }
+
+    .teacherVShourChartContainer {
+        padding: 18px;
+    }
+
+    #teacherHourYearChart {
+        height: 510px !important;
+    }
+}
+
+/* Mobile screens */
+@media screen and (max-width: 480px) {
+    .mainContainer {
+        padding: 10px 5px;
+    }
+
+    .generateForm {
+        padding: 12px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    .input, .select {
+        width: 100%;
+        margin: 8px 0;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .generateBtn, .backBtn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+    }
+
+    .teacherVShourChartContainer {
+        padding: 14px;
+    }
+
+    #teacherHourYearChart {
+        height: 540px !important;
+    }
+
+    .chartHint {
+        font-size: 12px;
+    }
+}
+
+/* ==================== WORKLOAD ANALYSIS ==================== */
+
+.workload-analysis-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: rgb(45, 45, 45);
+    border-radius: 8px;
+    border: 1px solid rgb(80, 80, 80);
+}
+
+.workload-summary {
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: rgb(55, 55, 55);
+    border-left: 4px solid #4a9eff;
+    border-radius: 4px;
+}
+
+.workload-summary h4 {
+    color: #4a9eff;
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.workload-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    line-height: 1;
+}
+
+.workload-stats {
+    color: rgb(200, 200, 200);
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.workload-threshold {
+    color: rgb(180, 180, 180);
+    margin: 8px 0;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.workload-category {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid;
+}
+
+.workload-category h5 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.workload-category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.workload-category li {
+    padding: 8px 0;
+    color: rgb(200, 200, 200);
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.workload-category li:last-child {
+    border-bottom: none;
+}
+
+.workload-overloaded {
+    background-color: rgba(255, 59, 48, 0.1);
+    border-left-color: #ff3b30;
+}
+
+.workload-overloaded h5 {
+    color: #ff6b61;
+}
+
+.workload-overloaded .excess {
+    color: #ff3b30;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.workload-underutilized {
+    background-color: rgba(255, 159, 10, 0.1);
+    border-left-color: #ff9f0a;
+}
+
+.workload-underutilized h5 {
+    color: #ffb340;
+}
+
+.workload-underutilized .deficit {
+    color: #ff9f0a;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.workload-balanced {
+    background-color: rgba(74, 158, 255, 0.1);
+    border-left-color: #4a9eff;
+}
+
+.workload-balanced h5 {
+    color: #4a9eff;
+}
+
+.workload-ideal {
+    background-color: rgba(52, 199, 89, 0.1);
+    border-left-color: #34c759;
+}
+
+.workload-ideal h5 {
+    color: #5fd97a;
+}
+
+/* Responsive workload analysis */
+@media screen and (max-width: 768px) {
+    .workload-analysis-container {
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .workload-summary h4 {
+        font-size: 18px;
+    }
+
+    .workload-stats, .workload-threshold {
+        font-size: 14px;
+    }
+
+    .workload-category h5 {
+        font-size: 16px;
+    }
+
+    .workload-category li {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .workload-analysis-container {
+        padding: 12px;
+        margin-top: 15px;
+    }
+
+    .workload-summary {
+        padding: 12px;
+    }
+
+    .workload-summary h4 {
+        font-size: 16px;
+    }
+
+    .workload-stats, .workload-threshold {
+        font-size: 13px;
+    }
+
+    .workload-category {
+        padding: 12px;
+    }
+
+    .workload-category h5 {
+        font-size: 15px;
+    }
+
+    .workload-category li {
+        font-size: 13px;
+        padding: 6px 0;
+    }
+}
